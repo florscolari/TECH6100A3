@@ -1,5 +1,5 @@
 # TECH6100 Assessment 3 Florencia Scolari ID 1847863 June 2025
-# Check the full project and references on the GitHub Public Repo #todo: add link to public repo
+# Check the full project and references on the GitHub Public Repo https://github.com/florscolari/TECH6100A3.git
 
 # User for Testing Purposes:
 #todo: update testing user
@@ -28,12 +28,13 @@
 
 import uuid #to generate unique ids
 import hashlib #to handle passwords in a safer manner
-from datetime import datetime
-import random
+from datetime import datetime #to set datestamp when booking a flight
+import random #to create random combinations for flight seat assignation
 
 
 # ------ START Functions needed on Class Definition --------- #
 def generate_short_id(item_type):
+    """Generates uniques IDs of 4 characters, for multiple items such as customers and flights"""
     item_type = item_type.lower()
     if item_type == "user":
         return f"C{uuid.uuid4().hex[:4]}"  # First 4 characters of the UUID
@@ -43,11 +44,11 @@ def generate_short_id(item_type):
         pass
 
 def hash_password(password):
+    """Handles passwords with hash technique instead of storing it as plain text"""
     return hashlib.sha256(password.encode()).hexdigest()
 
-
 def generate_flight_seat():
-    """Generate Assigned Seat when booking"""
+    """Generates Assigned Seat when booking"""
     seat_letter = ['A', 'B', 'C', 'D', 'E', 'F']
     seat_number = list(range(1, 30))
 
@@ -239,13 +240,14 @@ class UserManager:
 
 # ------ START ✈️ Flight Class --------- #
 class Flight:
-    def __init__(self, origin, destination, departure_time, arrival_time, price, seats_available):
+    def __init__(self, origin, destination, departure_time, arrival_time, price, points_by_flight, seats_available):
         self.__flight_number = None
         self.__origin: str = origin
         self.__destination: str = destination
         self.__departure_time: str = departure_time
         self.__arrival_time: str = arrival_time
         self.__price: float = price
+        self.__points_by_flight: int = points_by_flight
         self.__seats_available: int = seats_available
 
     # To display data from a class object to users
@@ -257,6 +259,8 @@ class Flight:
                 f"Departure Time: {self.__departure_time}\n"
                 f"Arrival Time: {self.__arrival_time}\n"
                 f"Price: ${self.__price}\n"
+                f"Reward Points: ${self.__points_by_flight}\nYou'll win these points by booking this flight (limited "
+                f"offer).\n"
                 f"Seats Available: {self.__seats_available}"
                 )
 
@@ -269,6 +273,7 @@ class Flight:
                 f"Departure Time: {self.__departure_time} : {type(self.__departure_time)}\n"
                 f"Arrival Time: {self.__arrival_time} : {type(self.__arrival_time)}\n"
                 f"Price: ${self.__price} : {type(self.__price)}\n"
+                f"Reward Points: ${self.__points_by_flight} : {type(self.__points_by_flight)}\n"
                 f"Seats Available: {self.__seats_available} : {type(self.__seats_available)}"
         )
 
@@ -290,6 +295,9 @@ class Flight:
 
     def get_price(self):
         return self.__price
+
+    def get_points_by_flight(self):
+        return self.__points_by_flight
 
     def get_seats_available(self):
         return self.__seats_available
@@ -314,6 +322,9 @@ class Flight:
     def set_price(self, value):
         self.__price = value
 
+    def set_points_by_flight(self, value):
+        self.__points_by_flight = value
+
     def set_seats_available(self, value):
         self.__seats_available = value
 
@@ -337,6 +348,7 @@ class Booking:
                 f"Booking Number: {self.__booking_number}\n"
                 f"Purchased on: {self.__purchase_date}\n"
                 f"Paid: {self.__price_paid}"
+                f"Reward Points Won: {self.__flight.get_points_by_flight()}"
                 f"Status: {self.__status}"
                 f"# ------- Flight Details -------- #\n"
                 f"Flight Number: {self.__flight.get_flight_number()}\n"
@@ -353,6 +365,7 @@ class Booking:
                 f"Booking Number: {self.__booking_number} : {type(self.__booking_number)}\n"
                 f"Purchased on: {self.__purchase_date} : {type(self.__purchase_date)}\n"
                 f"Paid: {self.__price_paid} : {type(self.__price_paid)}"
+                f"Reward Points Won: {self.__flight.get_points_by_flight()} : {type(self.__flight.get_points_by_flight())}"
                 f"Status: {self.__status} : {type(self.__status)}"
                 f"# ------- Flight Details -------- #\n"
                 f"Flight Number: {self.__flight.get_flight_number() : {type(self.__flight.get_flight_number())}}\n"
@@ -363,12 +376,34 @@ class Booking:
                 f"Seat: {self.__flight_seat} : {type(self.__flight_seat)}"
         )
 
-
     #Getters
+    def get_booking_number(self):
+        return self.__booking_number
+
+    def get_purchase_date(self):
+        return self.__purchase_date
+
+    def get_price_paid(self):
+        return self.__price_paid
+
+    def get_points_by_flight(self):
+        return self.__flight.get_points_by_flight()
+
+    def get_status(self):
+        return self.__status
 
     #Setters
     def set_booking_number(self, flight):
         self.__booking_number = f"B{flight.get_flight_number()}"
+
+    def set_purchase_date(self, value):
+        self.__purchase_date = value
+
+    def set_price_paid(self, value):
+        self.__price_paid = value
+
+    def set_status(self, value):
+        self.__status = value
 
     def set_flight_seat(self):
         self.__flight_seat = generate_flight_seat()
