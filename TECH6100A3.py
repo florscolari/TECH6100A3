@@ -29,10 +29,7 @@
 import uuid #to generate unique ids
 import hashlib #to handle passwords in a safer manner
 from datetime import datetime
-
-import timestamp
-
-from sandbox import flight
+import random
 
 
 # ------ START Functions needed on Class Definition --------- #
@@ -47,6 +44,21 @@ def generate_short_id(item_type):
 
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
+
+
+def generate_flight_seat():
+    """Generate Assigned Seat when booking"""
+    seat_letter = ['A', 'B', 'C', 'D', 'E', 'F']
+    seat_number = list(range(1, 30))
+
+    # Taking random letter & random numbers
+    random_letter = random.choice(seat_letter)
+    random_number = random.choice(seat_number)
+
+    # Concatenate both
+    flight_seat = random_letter + random_number
+    return flight_seat
+
 # ------ END Functions needed on Class Definition --------- #
 
 # ------ START 🙋‍♀️️ User Class --------- #
@@ -317,7 +329,7 @@ class Booking:
             self.__purchase_date: str = timestamp.strftime("%a %d %b %H:%M")
             self.__price_paid = None
             self.__status: str = status
-            self.__seat_number = None
+            self.__flight_seat = None
 
 # To display data from a class object to users
     def __str__(self):
@@ -332,27 +344,34 @@ class Booking:
                 f"Destination: {self.__flight.get_destination()}\n"
                 f"Departure Time: {self.__flight.get_departure_time()}\n"
                 f"Arrival Time: {self.__flight.get_arrival_time()}\n"
-                f"Seat: {self.__seat_number}"
+                f"Seat: {self.__flight_seat}"
                 )
 
     # To display data from a class object to programmers
     def __repr__(self):
         return (f"------\n"
-                f"Flight Number: {self.__flight_number} : {type(self.__flight_number)}\n"
-                f"Origin: {self.__origin} : {type(self.__origin)}\n"
-                f"Destination: {self.__destination} : {type(self.__destination)}\n"
-                f"Departure Time: {self.__departure_time} : {type(self.__departure_time)}\n"
-                f"Arrival Time: {self.__arrival_time} : {type(self.__arrival_time)}\n"
-                f"Price: ${self.__price} : {type(self.__price)}\n"
-                f"Seats Available: {self.__seats_available} : {type(self.__seats_available)}"
+                f"Booking Number: {self.__booking_number} : {type(self.__booking_number)}\n"
+                f"Purchased on: {self.__purchase_date} : {type(self.__purchase_date)}\n"
+                f"Paid: {self.__price_paid} : {type(self.__price_paid)}"
+                f"Status: {self.__status} : {type(self.__status)}"
+                f"# ------- Flight Details -------- #\n"
+                f"Flight Number: {self.__flight.get_flight_number() : {type(self.__flight.get_flight_number())}}\n"
+                f"Origin: {self.__flight.get_origin()} : {type(self.__flight.get_origin())}\n"
+                f"Destination: {self.__flight.get_destination() : {type(self.__flight.get_destination())}}\n"
+                f"Departure Time: {self.__flight.get_departure_time()} : {type(self.__flight.get_departure_time())}\n"
+                f"Arrival Time: {self.__flight.get_arrival_time()} : {type(self.__flight.get_arrival_time())}\n"
+                f"Seat: {self.__flight_seat} : {type(self.__flight_seat)}"
         )
 
 
     #Getters
 
     #Setters
-    def set_booking_number(self, flight_number):
-        self.__booking_number = f"B{flight_number}"
+    def set_booking_number(self, flight):
+        self.__booking_number = f"B{flight.get_flight_number()}"
+
+    def set_flight_seat(self):
+        self.__flight_seat = generate_flight_seat()
 
 # ------ END 📗 Booking Class --------- #
 
