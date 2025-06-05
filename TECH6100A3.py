@@ -29,22 +29,29 @@
 import uuid #to generate unique ids
 import hashlib #to handle passwords in a safer manner
 
-#todo: Create User Class
-# ------ START 🙋‍♀️ USER Classes --------- #
-def generate_short_id():
-    return uuid.uuid4().hex[:6]  # First 6 characters of the UUID
+# ------ START Functions needed on Class Definition --------- #
+def generate_short_id(item_type):
+    item_type = item_type.lower()
+    if item_type == "user":
+        return f"C{uuid.uuid4().hex[:4]}"  # First 4 characters of the UUID
+    elif item_type == "flight":
+        return f"F{uuid.uuid4().hex[:4]}"
+    else:
+        pass
 
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
+# ------ END Functions needed on Class Definition --------- #
 
-
+# ------ START 🙋‍♀️️ User Class --------- #
 class User:
-    def __init__(self, id, first_name, last_name, email, password, role, birth_date):
+    def __init__(self, id, first_name, last_name, email, password, phone_number, role, birth_date):
         self.__id : str = id
         self.__first_name : str = first_name
         self.__last_name : str = last_name
         self.__email : str = email
         self.__password : str = password
+        self.__phone_number: str = phone_number
         self.__role : str = role            #todo: 'agent' or 'customer'
         self.__birth_date: str = birth_date # for age calculation / filtering
         self.__address = None #Applied concept of Composition
@@ -62,6 +69,7 @@ class User:
         return (f"# --------------- #\n"
                 f"Name: {self.__first_name.title()} {self.__last_name.title()}\n"
                 f"Email: {self.__email}\n"
+                f"Phone Number: {self.__phone_number}\n"
                 f"Date of Birth: {self.__birth_date}\n"
                 f"Address: {self.__address} {self.__city}\n"
                 #f"Reward Points: {self.__total_points}"
@@ -75,6 +83,7 @@ class User:
                 f"Name: {self.__first_name} : {type(self.__first_name)} + {self.__last_name} :"
                 f" {type(self.__last_name)}\n"
                 f"Email: {self.__email} : {type(self.__email)}\n"
+                f"Phone Number: {self.__phone_number} : {type(self.__phone_number)}\n"
                 f"Password: {self.__password} : {type(self.__password)}\n"
                 f"Date of Birth: {self.__birth_date} : {type(self.__birth_date)}\n"
                 f"Address: {self.__address} : {type(self.__address)}\n"
@@ -98,6 +107,9 @@ class User:
     def get_password(self):
         return self.__password
 
+    def get_phone_number(self):
+        return self.__phone_number
+
     def get_role(self):
         return self.__role
 
@@ -109,7 +121,8 @@ class User:
 
     # User Setters:
     def set_id(self):
-        self.__id = generate_short_id()
+        item_type = "user"
+        self.__id = generate_short_id(item_type)
 
     def set_first_name(self, value):
         self.__first_name = value
@@ -123,6 +136,9 @@ class User:
     def set_password(self, value):
         self.__password = hash_password(value)
 
+    def set_phone_number(self, value):
+        self.__phone_number = value
+
     def set_role(self, value):
         self.__role = value
 
@@ -131,7 +147,6 @@ class User:
 
     def add_flight(self, flight):
         self.__flight_history.append(flight)
-
 
     """Set Address if is within Address class. If not -> show message"""
     def set_address(self,value):
@@ -151,8 +166,10 @@ class Address:
     def __str__(self):
         return (f"{self.__street.title()} {self.__city.title()} {self.__state.upper()} ({self.__zip_code})"
                 f" {self.__country.title()}")
+# ------ END 🙋‍♀️️ USER Class --------- #
 
-
+# ------ START 🙋‍♀️🙋 USER MANAGER Class --------- #
+#todo: Adjust UserManager Class
 class UserManager:
     def __init__(self, name):
         self.__name = name
@@ -200,7 +217,89 @@ class UserManager:
         self.__user_list.remove(user)
         self.__total_users -= 1
 
-# ------ END 🙋‍♀️ USER Classes --------- #
+# ------ END 🙋‍♀️🙋️ USER MANAGER Classes --------- #
+
+# ------ START ✈️ Flight Class --------- #
+class Flight:
+    def __init__(self, origin, destination, departure_time, arrival_time, price, seats_available):
+        self.__flight_number = None
+        self.__origin: str = origin
+        self.__destination: str = destination
+        self.__departure_time: str = departure_time
+        self.__arrival_time: str = arrival_time
+        self.__price: float = price
+        self.__seats_available: int = seats_available
+
+    # To display data from a class object to users
+    def __str__(self):
+        return (f"# --------------- #\n"
+                f"Flight Number: {self.__flight_number}\n"
+                f"Origin: {self.__origin}\n"
+                f"Destination: {self.__destination}\n"
+                f"Departure Time: {self.__departure_time}\n"
+                f"Arrival Time: {self.__arrival_time}\n"
+                f"Price: ${self.__price}\n"
+                f"Seats Available: {self.__seats_available}"
+                )
+
+    # To display data from a class object to programmers
+    def __repr__(self):
+        return (f"------\n"
+                f"Flight Number: {self.__flight_number} : {type(self.__flight_number)}\n"
+                f"Origin: {self.__origin} : {type(self.__origin)}\n"
+                f"Destination: {self.__destination} : {type(self.__destination)}\n"
+                f"Departure Time: {self.__departure_time} : {type(self.__departure_time)}\n"
+                f"Arrival Time: {self.__arrival_time} : {type(self.__arrival_time)}\n"
+                f"Price: ${self.__price} : {type(self.__price)}\n"
+                f"Seats Available: {self.__seats_available} : {type(self.__seats_available)}"
+        )
+
+    #Getters
+    def get_flight_number(self):
+        return self.__flight_number
+
+    def get_origin(self):
+        return self.__origin
+
+    def get_destination(self):
+        return self.__destination
+
+    def get_departure_time(self):
+        return self.__departure_time
+
+    def get_arrival_time(self):
+        return self.__arrival_time
+
+    def get_price(self):
+        return self.__price
+
+    def get_seats_available(self):
+        return self.__seats_available
+
+    #Setters
+    def set_flight_number(self):
+        item_type = "flight"
+        self.__flight_number = generate_short_id(item_type)
+
+    def set_origin(self, value):
+        self.__origin = value
+
+    def set_destination(self, value):
+        self.__destination = value
+
+    def set_departure_time(self, value):
+        self.__departure_time = value
+
+    def set_arrival_time(self, value):
+        self.__arrival_time = value
+
+    def set_price(self, value):
+        self.__price = value
+
+    def set_seats_available(self, value):
+        self.__seats_available = value
+
+# ------ END ✈️ Flight Class --------- #
 
 
 
