@@ -28,6 +28,12 @@
 
 import uuid #to generate unique ids
 import hashlib #to handle passwords in a safer manner
+from datetime import datetime
+
+import timestamp
+
+from sandbox import flight
+
 
 # ------ START Functions needed on Class Definition --------- #
 def generate_short_id(item_type):
@@ -301,12 +307,53 @@ class Flight:
 
 # ------ END ✈️ Flight Class --------- #
 
+# ------ START 📗 Booking Class --------- #
+class Booking:
+    def __init__(self, user, flight: Flight, status):
+            timestamp = datetime.now()
+            self.__booking_number = None
+            self.__user_id: User = user
+            self.__flight: Flight = flight
+            self.__purchase_date: str = timestamp.strftime("%a %d %b %H:%M")
+            self.__price_paid = None
+            self.__status: str = status
+            self.__seat_number = None
+
+# To display data from a class object to users
+    def __str__(self):
+        return (f"# --------------- #\n"
+                f"Booking Number: {self.__booking_number}\n"
+                f"Purchased on: {self.__purchase_date}\n"
+                f"Paid: {self.__price_paid}"
+                f"Status: {self.__status}"
+                f"# ------- Flight Details -------- #\n"
+                f"Flight Number: {self.__flight.get_flight_number()}\n"
+                f"Origin: {self.__flight.get_origin()}\n"
+                f"Destination: {self.__flight.get_destination()}\n"
+                f"Departure Time: {self.__flight.get_departure_time()}\n"
+                f"Arrival Time: {self.__flight.get_arrival_time()}\n"
+                f"Seat: {self.__seat_number}"
+                )
+
+    # To display data from a class object to programmers
+    def __repr__(self):
+        return (f"------\n"
+                f"Flight Number: {self.__flight_number} : {type(self.__flight_number)}\n"
+                f"Origin: {self.__origin} : {type(self.__origin)}\n"
+                f"Destination: {self.__destination} : {type(self.__destination)}\n"
+                f"Departure Time: {self.__departure_time} : {type(self.__departure_time)}\n"
+                f"Arrival Time: {self.__arrival_time} : {type(self.__arrival_time)}\n"
+                f"Price: ${self.__price} : {type(self.__price)}\n"
+                f"Seats Available: {self.__seats_available} : {type(self.__seats_available)}"
+        )
 
 
+    #Getters
+
+    #Setters
+    def set_booking_number(self, flight_number):
+        self.__booking_number = f"B{flight_number}"
+
+# ------ END 📗 Booking Class --------- #
 
 
-
-
-
-
-#todo: Create UserManager Class
