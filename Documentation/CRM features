@@ -36,6 +36,9 @@ Agents can:
 
 14.Logout
 
+OUT OF SCOPE
+- CRUD Company Agent
+
 CLASS STRUCTURES
 Class User:
     id
