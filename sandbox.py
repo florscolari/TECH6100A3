@@ -34,9 +34,10 @@ def generate_seat_number():
 
 from datetime import date
 
-def calculate_age(birth_date):
+def calculate_age(dob):
+    """Calculates age based on date of birth with an object of class date(yyyy, m, dd)"""
     today = date.today()
-    age = today.year - birth_date.year
+    age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
     return age
 
 birth_date = date(1990, 5, 15) # Example birth date
@@ -44,5 +45,3 @@ age = calculate_age(birth_date)
 print(f"Age: {age}")
 print(type(birth_date))
 
-#todo: when ask for date of birth: ask for dob.day = input('day'), then dob.month = input('month'), then dob.year =
-# input('year'). wrap all up as dob = date(dob.year, dob.month, dob.day)

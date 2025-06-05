@@ -75,12 +75,14 @@ def generate_flight_seat():
 def calculate_age(dob):
     """Calculates age based on date of birth with an object of class date(yyyy, m, dd)"""
     today = date.today()
-    age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+    age = today.year - dob.year
     return age
 
 # Example birth date
 #birth_date = date(1990, 5, 15)
 #age = calculate_age(birth_date)
+#todo: when ask for date of birth: ask for dob.day = input('day'), then dob.month = input('month'), then dob.year =
+# input('year'). wrap all up as dob = date(dob.year, dob.month, dob.day)
 
 # ------ END Functions needed on Class Definition --------- #
 
@@ -518,23 +520,26 @@ class BookingManager:
 customer_list = UserManager("Customer Collection")
 agent_list = UserManager("Agent Collection")
 
-customer1 = User("CC", "Elle", "Doe", "test@t.com.au", "ElleD", "00000000000")
+customer1 = User("CC", "Elle", "Doe", "test@t.com.au", "ElleD", "00000000000", None, None)
 address1 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
 customer1.set_role(user_roles[0])
+customer1.set_birth_date(date(1995, 5, 20))
 customer1.set_id_fixed('C0f66')
 customer1.set_address(address1)
 customer_list.add_user(customer1)
 
-customer2 = User("CC", "James", "Williams", "williams@t.com.au", "JD12", "111111")
+customer2 = User("CC", "James", "Williams", "williams@t.com.au", "JD12", "111111", None, None)
 address2 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
 customer2.set_role(user_roles[0])
+customer2.set_birth_date(date(1999, 9, 16))
 customer2.set_id_fixed('Cc618')
 customer2.set_address(address2)
 customer_list.add_user(customer2)
 
-agent1 = User("AA", "Flor", "Scolari", "flor@sco.com.au", "JD12", "111111")
+agent1 = User("AA", "Flor", "Scolari", "flor@sco.com.au", "JD12", "111111", None, None)
 address2 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
 agent1.set_role(user_roles[1])
+agent1.set_birth_date(date(1989, 1, 24))
 agent1.set_id_fixed('Ac618')
 agent1.set_address(address2)
 agent_list.add_user(agent1)
