@@ -1,8 +1,5 @@
 import random
-import uuid
 
-
-from uuid import uuid1, uuid3
 
 import uuid
 
@@ -34,3 +31,18 @@ def generate_seat_number():
     # Concatenate both
     flight_seat = random_letter + random_number
     return flight_seat
+
+from datetime import date
+
+def calculate_age(birth_date):
+    today = date.today()
+    age = today.year - birth_date.year
+    return age
+
+birth_date = date(1990, 5, 15) # Example birth date
+age = calculate_age(birth_date)
+print(f"Age: {age}")
+print(type(birth_date))
+
+#todo: when ask for date of birth: ask for dob.day = input('day'), then dob.month = input('month'), then dob.year =
+# input('year'). wrap all up as dob = date(dob.year, dob.month, dob.day)

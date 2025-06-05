@@ -30,6 +30,7 @@ import uuid #to generate unique ids
 import hashlib #to handle passwords in a safer manner
 from datetime import datetime #to set datestamp when booking a flight
 import random #to create random combinations for flight seat assignation
+from datetime import date #to calculate dates/age
 
 # ------ START Datasets needed on Class Definition --------- #
 # User > Roles
@@ -71,6 +72,16 @@ def generate_flight_seat():
     flight_seat = random_letter + random_number
     return flight_seat
 
+def calculate_age(dob):
+    """Calculates age based on date of birth with an object of class date(yyyy, m, dd)"""
+    today = date.today()
+    age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+    return age
+
+# Example birth date
+#birth_date = date(1990, 5, 15)
+#age = calculate_age(birth_date)
+
 # ------ END Functions needed on Class Definition --------- #
 
 # ------ START 🙋‍♀️️ User Class --------- #
@@ -83,7 +94,7 @@ class User:
         self.__password : str = password
         self.__phone_number: str = phone_number
         self.__role : str = role            #todo: 'agent' or 'customer'
-        self.__birth_date: str = birth_date # for age calculation / filtering
+        self.__birth_date: date = birth_date # for age calculation / filtering
         self.__address = None #Applied concept of Composition
         self.__city = None
         #self.__total_points: int = total_points #loyalty points accumulated
@@ -505,20 +516,28 @@ class BookingManager:
 
 #🙋 2 Customers added to have data to handle when the program starts
 customer_list = UserManager("Customer Collection")
+agent_list = UserManager("Agent Collection")
 
-customer1 = User("AA", "Elle", "Doe", "test@t.com.au", "ElleD", "00000000000")
+customer1 = User("CC", "Elle", "Doe", "test@t.com.au", "ElleD", "00000000000")
 address1 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
 customer1.set_role(user_roles[0])
 customer1.set_id_fixed('C0f66')
 customer1.set_address(address1)
 customer_list.add_user(customer1)
 
-customer2 = User("AA", "James", "Williams", "williams@t.com.au", "JD12", "111111")
+customer2 = User("CC", "James", "Williams", "williams@t.com.au", "JD12", "111111")
 address2 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
 customer2.set_role(user_roles[0])
 customer2.set_id_fixed('Cc618')
 customer2.set_address(address2)
 customer_list.add_user(customer2)
+
+agent1 = User("AA", "Flor", "Scolari", "flor@sco.com.au", "JD12", "111111")
+address2 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
+agent1.set_role(user_roles[1])
+agent1.set_id_fixed('Ac618')
+agent1.set_address(address2)
+agent_list.add_user(agent1)
 
 #✈️ 3 Flights added
 flight_list = FlightManager("Flight Collection")
@@ -538,3 +557,4 @@ booking1 = Booking(customer1.get_id(), flight1.get_flight_number(),booking_statu
 booking2 = Booking(customer1.get_id(), flight2.get_flight_number(),booking_status[1])
 booking3 = Booking(customer2.get_id(), flight2.get_flight_number(),booking_status[1])
 booking4 = Booking(customer2.get_id(), flight3.get_flight_number(),booking_status[0])
+
