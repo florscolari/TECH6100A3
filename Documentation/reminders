@@ -1,0 +1,41 @@
+"""
+Online Banking
+Airlines
+Supermarkets - Woolworths
+Bank industry
+
+Common & required features for advanced customer relationship management system
+External services -> simulate an email for birthday? or newsletter?
+Research about that. e.g. if user selects this feature, prepare a message with its name
+
+data security -> maybe encrypt passwords?
+
+Rubric Marks
+
+Code implementation: 15
+Advanced implementation with excellent performance
+and optimised features.
+
+Unit Testing: 10
+Thorough unit tests with high coverage and
+strict adherence to test-driven development (TDD).
+
+Exception Handling: 10
+Advanced exception handling with robust error
+handling and advanced techniques for handling
+complex scenarios.
+
+Adherence to Best Practices: 5
+Advanced adherence to coding conventions,
+exemplary naming conventions, and impeccable
+code style.
+
+CSV module or JSON module
+must be a dictionary to export it either way
+
+hash techniques
+to avoid store raw data
+"pushing one letter next"
+
+"""
+

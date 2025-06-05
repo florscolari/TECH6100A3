@@ -1,0 +1,69 @@
+
+// ---- CRM Flight Booking System – Master Feature List ---- //
+
+GenAi co-creation on June 5 2025: https://chatgpt.com/share/684141fa-ed3c-8010-9433-c88edb174aea
+Organize this by role, then outline your class structures, and finally break it down by functions/pseudocode blocks you'll need to implement.
+
+👤 CUSTOMER FEATURES
+Customers can:
+00. When new customer: Create account (add customer (user: customer type)
+1. View Available Flights
+2. Book a Flight (by id)
+3. View Their Own Bookings
+4. View Loyalty Points (based on purchase count) + TAGS
+        View Automated Tags:
+        - Based on number of purchases (New, Silver, Premium, Black)
+        - Additional VIP tag if >3 bookings of more than $1000 each
+5. Delete account (remove customer)
+6. Logout
+
+🧑‍💼 COMPANY AGENT FEATURES
+Agents can:
+1. View All Customers
+2. Filter Customers by Address
+3. Filter Customers by Age Range
+4. Search Customer by ID
+5.View Customer Details by ID
+6. Add customer
+7. Remove customer by ID
+8.Export Single Customer to CSV
+
+9. View All Flights
+10. Add New Flight
+11. Edit/Delete Flights
+12. View Customer Tags
+13. Export All Customer Data to CSV
+
+14.Logout
+
+CLASS STRUCTURES
+Class User:
+    id
+    name
+    email
+    password
+    role            // 'agent' or 'customer'
+    birthdate       // for age calculation/filtering
+    address
+    points          // loyalty points accumulated
+    total_spent     // total amount spent on flights
+    total_flights   // total flights booked
+
+Class Flight:
+    id
+    flight_number
+    origin
+    destination
+    departure_time
+    arrival_time
+    price
+    seats_available
+
+Class Booking:
+    id
+    customer_id
+    flight_id
+    purchase_date
+    price_paid
+    status          // 'confirmed' or 'cancelled'
+

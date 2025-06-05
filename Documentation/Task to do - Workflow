@@ -1,0 +1,24 @@
+Suggested step-by-step workflow:
+Define your classes: User, Flight, Booking
+Include attributes and simple constructors.
+
+Create sample data:
+Hardcode a few users (agents and customers), flights, and bookings to test.
+
+Write your login function:
+Make sure it validates users correctly and distinguishes roles.
+
+Build main menu and role-based menus:
+Start with basic printout menus and input handlers, no features yet.
+
+Implement simple features first:
+For example, list all flights for customers, list all customers for agents.
+
+Add CRUD operations gradually:
+Add booking, create flight, add/remove customers, filtering, etc.
+
+Add advanced features:
+Loyalty points, automated tags, export to CSV.
+
+Test extensively after each new feature
+This way you can catch errors early.

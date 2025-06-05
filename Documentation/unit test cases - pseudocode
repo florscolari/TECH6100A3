@@ -1,0 +1,97 @@
+
+#TODO: implement at least 2 of these unit test cases
+4 UNIT TEST CASES
+
+
+✅ 1. Test: Creating a New Customer User
+Goal: Make sure a new customer is created correctly with the expected values.
+
+Test: create_customer_creates_correct_user_object
+
+Steps:
+- Create a new User object with role = "customer", name, email, birthdate, etc.
+- Check:
+    - User.name == expected name
+    - User.role == "customer"
+    - User.points == 0
+    - User.total_flights == 0
+
+
+✅ 2. Test: Login with Correct and Incorrect Credentials
+Goal: Ensure login function returns the correct user or None.
+
+Test: login_returns_user_with_correct_credentials
+
+Steps:
+- Add one test user to your users list.
+- Try logging in with correct email + password → expect to get the User.
+- Try with wrong email or wrong password → expect to get None.
+
+
+✅ 3. Test: Booking Reduces Seats Available
+Goal: Booking a flight should decrease the seats_available by 1.
+
+Test: booking_reduces_flight_seats_by_one
+
+Steps:
+- Create a Flight with 5 seats available.
+- Simulate a booking.
+- Check that flight.seats_available == 4
+
+
+✅ 4. Test: Tag Assignment Based on Purchase Count
+Goal: Check that customer gets correct tag after multiple bookings.
+
+Test: tags_assigned_correctly_based_on_bookings
+
+Steps:
+- Simulate a customer with 0, 1, 4, and 6 purchases.
+- Call the tag assignment function.
+- Check that returned tag matches:
+    - 0 → New
+    - 1 → Silver
+    - 4 → Premium
+    - 6 → Black
+Bonus Tip:
+If you're using Python, you could write your tests using unittest or even just simple assert statements while testing manually.
+
+
+
+
+
+
+A sample unit test in pseudocode for the test case:
+
+🧪 Test: tags_assigned_correctly_based_on_bookings
+This test checks that your function for assigning a tag based on the number of purchases returns the correct tag.
+
+📌 Function Under Test
+Let’s assume you have a function like:
+
+
+Function get_purchase_tag(purchase_count):
+    If purchase_count == 0:
+        return "New"
+    Else if purchase_count >= 1 AND purchase_count <= 3:
+        return "Silver"
+    Else if purchase_count >= 4 AND purchase_count <= 5:
+        return "Premium"
+    Else:
+        return "Black"
+✅ Pseudocode Unit Test
+
+Function test_tags_assigned_correctly_based_on_bookings():
+
+    Assert get_purchase_tag(0) == "New"
+    Assert get_purchase_tag(1) == "Silver"
+    Assert get_purchase_tag(3) == "Silver"
+    Assert get_purchase_tag(4) == "Premium"
+    Assert get_purchase_tag(5) == "Premium"
+    Assert get_purchase_tag(6) == "Black"
+    Assert get_purchase_tag(10) == "Black"
+
+    Print "test_tags_assigned_correctly_based_on_bookings passed"
+📝 How to run it
+Just call this test function after you define get_purchase_tag().
+
+test_tags_assigned_correctly_based_on_bookings()
