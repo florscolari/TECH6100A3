@@ -31,6 +31,17 @@ import hashlib #to handle passwords in a safer manner
 from datetime import datetime #to set datestamp when booking a flight
 import random #to create random combinations for flight seat assignation
 
+# ------ START Datasets needed on Class Definition --------- #
+# User > Roles
+user_roles = ('customer', 'agent')
+
+# User > Tags
+user_tags = ('New','Silver','Premium', 'Black', 'VIP')
+
+# Booking > Status
+booking_status = ('confirmed', 'cancelled')
+
+# ------ END Datasets needed on Class Definition --------- #
 
 # ------ START Functions needed on Class Definition --------- #
 def generate_short_id(item_type):
