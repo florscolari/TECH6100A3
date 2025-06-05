@@ -16,8 +16,11 @@ def generate_short_id(item_type):
         pass
 
 flight = "flight"
-id = generate_short_id(flight)
-print(id)
+idF = generate_short_id(flight)
+
+user = "user"
+idU = generate_short_id(user)
+print(idU)
 
 def generate_seat_number():
     """Generate Assigned Seat when booking"""

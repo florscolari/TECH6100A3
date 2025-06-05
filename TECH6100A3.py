@@ -154,6 +154,10 @@ class User:
         item_type = "user"
         self.__id = generate_short_id(item_type)
 
+    def set_id_fixed(self, value):
+        """Hardcodes a fixed IDs for users... Only for populated data purposes"""
+        self.__id = value
+
     def set_first_name(self, value):
         self.__first_name = value
 
@@ -315,8 +319,13 @@ class Flight:
 
     #Setters
     def set_flight_number(self):
+        """Generates unique IDs for flight numbers"""
         item_type = "flight"
         self.__flight_number = generate_short_id(item_type)
+
+    def set_flight_number_fixed(self, value):
+        """Hardcodes a fixed IDs for flight numbers... Only for populated data purposes"""
+        self.__flight_number = value
 
     def set_origin(self, value):
         self.__origin = value
@@ -421,4 +430,38 @@ class Booking:
 
 # ------ END 📗 Booking Class --------- #
 
+#🙋 2 Customers added to have data to handle when the program starts
+customer_list = UserManager("Customer Collection")
 
+customer1 = User("AA", "Elle", "Doe", "test@t.com.au", "ElleD", "00000000000")
+address1 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
+customer1.set_role(user_roles[0])
+customer1.set_id_fixed('C0f66')
+customer1.set_address(address1)
+customer_list.add_user(customer1)
+
+customer2 = User("AA", "James", "Williams", "williams@t.com.au", "JD12", "111111")
+address2 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
+customer2.set_role(user_roles[0])
+customer2.set_id_fixed('Cc618')
+customer2.set_address(address2)
+customer_list.add_user(customer2)
+
+#✈️ 3 Flights added
+flight_list = FlightManager("Flight Collection")
+flight1 = Flight('Perth', 'Sydney', '9:25', '0:35', 489, 240, 9)
+flight2 = Flight('Sydney', 'Canberra', '8:13', '9:40', 112, 45, 4)
+flight3 = Flight('Canberra', 'Perth', '4:37', '7:56', 420, 220, 8)
+flight1.set_flight_number_fixed('F53e0')
+flight2.set_flight_number_fixed('F53e1')
+flight3.set_flight_number_fixed('F53e2')
+flight_list.add_flight(flight1)
+flight_list.add_flight(flight2)
+flight_list.add_flight(flight3)
+
+#📗 4 Bookings added
+booking_list = BookingManager('Booking Collection')
+booking1 = Booking(customer1.get_id(), flight1.get_flight_number(),booking_status[0])
+booking2 = Booking(customer1.get_id(), flight2.get_flight_number(),booking_status[1])
+booking3 = Booking(customer2.get_id(), flight2.get_flight_number(),booking_status[1])
+booking4 = Booking(customer2.get_id(), flight3.get_flight_number(),booking_status[0])

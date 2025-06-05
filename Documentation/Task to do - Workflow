@@ -1,6 +1,6 @@
 Suggested step-by-step workflow:
-Define your classes: User, Flight, Booking
-Include attributes and simple constructors.
+✅ Define your classes: User, Flight, Booking
+✅ Include attributes and simple constructors.
 
 Create sample data:
 Hardcode a few users (agents and customers), flights, and bookings to test.
