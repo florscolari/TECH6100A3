@@ -3,16 +3,19 @@ Suggested step-by-step workflow:
 ✅ Include attributes and simple constructors.
 
 Create sample data:
-Hardcode a few users (agents and customers), flights, and bookings to test.
+✅ Hardcode a few users (agents and customers), flights, and bookings to test.
 
 Write your login function:
-Make sure it validates users correctly and distinguishes roles.
+🔵 Make sure it validates users correctly and distinguishes roles.
 
 Build main menu and role-based menus:
 Start with basic printout menus and input handlers, no features yet.
 
 Implement simple features first:
 For example, list all flights for customers, list all customers for agents.
+
+Implement Unit Tests:
+implement at least 2 of these unit test cases
 
 Add CRUD operations gradually:
 Add booking, create flight, add/remove customers, filtering, etc.

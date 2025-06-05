@@ -45,3 +45,24 @@ age = calculate_age(birth_date)
 print(f"Age: {age}")
 print(type(birth_date))
 
+def login_user(username):
+    print(f'{username} successfully logged in!!')
+def check_password(password):
+    if password == '1234':
+        return True
+    else:
+        return False
+username = input('Enter username')
+password = input('Enter password')
+try:
+    if not check_password(password):
+        raise ValueError
+except ValueError:
+    print('Wrong Password! Try again!')
+else:
+     login_user(username)
+
+def hash_password(password):
+    """Handles passwords with hash technique instead of storing it as plain text"""
+    return hashlib.sha256(password.encode()).hexdigest()
+

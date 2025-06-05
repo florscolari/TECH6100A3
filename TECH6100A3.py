@@ -122,17 +122,16 @@ class User:
 
     # To display data from a class object to programmers
     def __repr__(self):
-        return (f"------\n"
-                f"Name: {self.__first_name} : {type(self.__first_name)} + {self.__last_name} :"
-                f" {type(self.__last_name)}\n"
-                f"Email: {self.__email} : {type(self.__email)}\n"
-                f"Phone Number: {self.__phone_number} : {type(self.__phone_number)}\n"
-                f"Password: {self.__password} : {type(self.__password)}\n"
-                f"Date of Birth: {self.__birth_date} : {type(self.__birth_date)}\n"
-                f"Address: {self.__address} : {type(self.__address)}\n"
-                #f"Reward Points: {self.__total_points} : {type(self.__total_points)}\n"
-                f"Flight History: {self.__flight_history} : {type(self.__flight_history)}"
-        )
+        return (f"# --------------- #\n"
+                f"Name: {self.__first_name.title()} {self.__last_name.title()}\n"
+                f"Email: {self.__email}\n"
+                f"Phone Number: {self.__phone_number}\n"
+                f"Date of Birth: {self.__birth_date}\n"
+                f"Address: {self.__address} {self.__city}\n"
+                # f"Reward Points: {self.__total_points}"
+                f"Flight History: {len(self.__flight_history)} flights\n"
+                # f"{order_list_str}\n"
+                )
 
     #User Getters:
     def get_id(self):
@@ -517,12 +516,14 @@ class BookingManager:
 
 
 #🙋 2 Customers added to have data to handle when the program starts
+
 customer_list = UserManager("Customer Collection")
 agent_list = UserManager("Agent Collection")
 
 customer1 = User("CC", "Elle", "Doe", "test@t.com.au", "ElleD", "00000000000", None, None)
 address1 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
 customer1.set_role(user_roles[0])
+customer1.set_password('Abc123')
 customer1.set_birth_date(date(1995, 5, 20))
 customer1.set_id_fixed('C0f66')
 customer1.set_address(address1)
@@ -531,6 +532,7 @@ customer_list.add_user(customer1)
 customer2 = User("CC", "James", "Williams", "williams@t.com.au", "JD12", "111111", None, None)
 address2 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
 customer2.set_role(user_roles[0])
+customer2.set_password('Abc123')
 customer2.set_birth_date(date(1999, 9, 16))
 customer2.set_id_fixed('Cc618')
 customer2.set_address(address2)
@@ -540,10 +542,17 @@ agent1 = User("AA", "Flor", "Scolari", "flor@sco.com.au", "JD12", "111111", None
 address2 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
 agent1.set_role(user_roles[1])
 agent1.set_birth_date(date(1989, 1, 24))
+agent1.set_password('Abc123')
 agent1.set_id_fixed('Ac618')
 agent1.set_address(address2)
 agent_list.add_user(agent1)
 
+
+
+all_user_list = UserManager("All Users") # to login validation purposes
+all_user_list.add_user(customer1)
+all_user_list.add_user(customer2)
+all_user_list.add_user(agent1)
 #✈️ 3 Flights added
 flight_list = FlightManager("Flight Collection")
 flight1 = Flight('Perth', 'Sydney', '9:25', '0:35', 489, 240, 9)
@@ -563,3 +572,83 @@ booking2 = Booking(customer1.get_id(), flight2.get_flight_number(),booking_statu
 booking3 = Booking(customer2.get_id(), flight2.get_flight_number(),booking_status[1])
 booking4 = Booking(customer2.get_id(), flight3.get_flight_number(),booking_status[0])
 
+def login():
+    print(f"Enter 'cancel' to quit.")
+
+    while True:
+        try:
+            user_email = input('Enter your email: \n')
+            if user_email.lower() == 'cancel':
+                print("Login canceled.")
+                return None
+
+            # Checks if email exists
+            user = None
+            for u in all_user_list.get_user_list():
+                if u.get_email().lower() == user_email.lower():
+                    user = u
+                    break
+
+            if not user:
+                raise ValueError("Email not found.")
+
+            user_password = input('Enter your password: \n')
+            if user_password.lower() == 'cancel':
+                print("Login canceled.")
+                return None
+
+            # Check if hashed password matches
+            if user.get_password() != hash_password(user_password):
+                raise ValueError("Incorrect password.")
+
+            print("✅ Login successful.")
+            return user
+
+        except ValueError:
+            print(f"❌ Try again or type 'cancel' to quit.")
+
+
+def show_agent_menu():
+    print("Here the menu for agents will be shown.")
+
+def show_customer_menu():
+    print("Here the menu for customers will be shown.")
+
+def create_user_account():
+    print("Here the user account creation will be shown.")
+
+def welcome():
+    """To welcome the user when starting the program. As Flight CRM, login is required to browse the site as
+    customer or travel agent."""
+    print("-" * 40)
+    print("🌎✈️ Welcome to Traveliverse ✈️🌎\n"
+          "Explore our offer of flights around Australia and beyond.\n"
+          "Login to access your account or create a new one\n")
+
+def main():
+    """Starts the program & Displays the login feature"""
+    while True:
+        print(f"1. Login\n"
+              f"2. Create an account\n"
+              f"0. Exit Program\n")
+        user_choice = input("Select an option: ").strip()
+        if user_choice == "1":
+                user = login()
+                if user is not None:
+                    if user.get_role() == 'agent':
+                        show_agent_menu()
+                    else:
+                        show_customer_menu()
+        elif user_choice == "2":
+                create_user_account()
+        elif user_choice == "0":
+            print("You have exited Traveliverse. See you next time!")
+            break
+        else:
+            print("❌ Invalid option. Try again using from 0 to 2 to select an option.")
+
+
+
+# -------- PROGRAM --------- #
+welcome()
+main()
