@@ -350,6 +350,42 @@ class Flight:
 
 # ------ END ✈️ Flight Class --------- #
 
+# ------ START ✈️✈️ FLIGHT MANAGER Classes --------- #
+#todo: Adjust FlightManager Class
+class FlightManager:
+    def __init__(self, name):
+        self.__name = name
+        self.__flight_list = []
+        self.__total_flights = 0
+
+    #Getters
+    def get_name(self):
+        return self.__name
+
+    def get_flight_list(self):
+        return self.__flight_list
+
+    def get_total_flights(self):
+        return self.__total_flights
+
+    def __str__(self):
+        return (f"️️✈️️️  {self.__name}   ✈️\n\t"
+                f"Current flights: {self.__total_flights}\n")
+
+    def display_flight_list(self):
+        for flight in self.__flight_list:
+            print(f"{flight.__str__()}")
+
+    def add_flight(self, flight: Flight):
+        self.__flight_list.append(flight)
+        self.__total_flights += 1
+
+    def remove_flight(self, flight: Flight):
+        self.__flight_list.remove(flight)
+        self.__total_flights -= 1
+
+# ------ END ✈️✈️ FLIGHT MANAGER Classes --------- #
+
 # ------ START 📗 Booking Class --------- #
 class Booking:
     def __init__(self, user, flight: Flight, status):
@@ -429,6 +465,43 @@ class Booking:
         self.__flight_seat = generate_flight_seat()
 
 # ------ END 📗 Booking Class --------- #
+
+# ------ START 📗📗️ BOOKING MANAGER Class --------- #
+#todo: Adjust BookingManager Class
+class BookingManager:
+    def __init__(self, name):
+        self.__name = name
+        self.__booking_list = []
+        self.__total_bookings = 0
+
+    #Getters
+    def get_name(self):
+        return self.__name
+
+    def get_booking_list(self):
+        return self.__booking_list
+
+    def get_total_bookings(self):
+        return self.__total_bookings
+
+    def __str__(self):
+        return (f"️️📗  {self.__name}   📗\n\t"
+                f"Current bookings: {self.__total_bookings}\n")
+
+    def display_booking_list(self):
+        for booking in self.__booking_list:
+            print(f"{booking.__str__()}")
+
+    def add_booking(self, booking: Booking):
+        self.__booking_list.append(booking)
+        self.__total_bookings += 1
+
+    def remove_booking(self, booking: Booking):
+        self.__booking_list.remove(booking)
+        self.__total_bookings -= 1
+
+# ------ END 📗📗️ BOOKING MANAGER Class --------- #
+
 
 #🙋 2 Customers added to have data to handle when the program starts
 customer_list = UserManager("Customer Collection")
