@@ -287,9 +287,9 @@ class Flight:
                 f"Departure Time: {self.__departure_time}\n"
                 f"Arrival Time: {self.__arrival_time}\n"
                 f"Price: ${self.__price}\n"
-                f"Reward Points: ${self.__points_by_flight}\nYou'll win these points by booking this flight (limited "
+                f"Reward Points: {self.__points_by_flight} // Win them when booking it (limited "
                 f"offer).\n"
-                f"Seats Available: {self.__seats_available}"
+                f"Seats Available: {self.__seats_available}\n"
                 )
 
     # To display data from a class object to programmers
@@ -555,7 +555,7 @@ all_user_list.add_user(customer1)
 all_user_list.add_user(customer2)
 all_user_list.add_user(agent1)
 #✈️ 3 Flights added
-flight_list = FlightManager("Flight Collection")
+flight_list = FlightManager("Available Flights") # Flight Collection
 flight1 = Flight('Perth', 'Sydney', '9:25', '0:35', 489, 240, 9)
 flight2 = Flight('Sydney', 'Canberra', '8:13', '9:40', 112, 45, 4)
 flight3 = Flight('Canberra', 'Perth', '4:37', '7:56', 420, 220, 8)
@@ -734,7 +734,9 @@ def export_customer_database():
 
 # --- AGENT > START Functions for Flight Management --- #
 def show_all_flights():
-    print("Here all flights will be shown.")
+    """prints the list of Flight objects: total number of available flights & display flight details"""
+    print(flight_list)
+    flight_list.display_flight_list()
 
 def show_flight_by_id():
     print("Here flight search by id will be shown.")
