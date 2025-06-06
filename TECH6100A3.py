@@ -17,6 +17,8 @@
 #todo: update out of scope section
 
 # 1. Global command to cancel an ongoing task.
+# 2. System creates Customer users by default. Agents are added by Admin role (out of scope)
+
 # 2. No user input validation for: phone, email & shipping address.
 # 3. Turning back for case: If user selects she/he has an account and doesn't know username & password, no way to recover from that. Dead End.
 # 5. Although I have set __str__ & __repr__ for Book, Order & User, I've used __str__ in most cases instead of __repr__
@@ -38,7 +40,7 @@ from datetime import date #to calculate dates/age
 user_roles = ('customer', 'agent')
 
 # User > Tags
-user_tags = ('New','Silver','Premium', 'Black', 'VIP')
+user_tags = ('Silver','Premium', 'Black')
 
 # Booking > Status
 booking_status = ('confirmed', 'cancelled')
@@ -89,20 +91,22 @@ def calculate_age(dob):
 
 # ------ START 🙋‍♀️️ User Class --------- #
 class User:
-    def __init__(self, id, first_name, last_name, email, password, phone_number, role, birth_date):
+    def __init__(self, id, first_name, last_name, email, password, phone_number, birth_date):
         self.__id : str = id
         self.__first_name : str = first_name
         self.__last_name : str = last_name
         self.__email : str = email
         self.__password : str = password
         self.__phone_number: str = phone_number
-        self.__role : str = role            #todo: 'agent' or 'customer'
+        self.__role : str = user_roles[0] # by default, this system creates Customer users. Agents are added by Admin (out of scope)
         self.__birth_date: date = birth_date # for age calculation / filtering
         self.__address = None #Applied concept of Composition
         self.__city = None
-        #self.__total_points: int = total_points #loyalty points accumulated
+        self.__total_points: int = 100 #loyalty points accumulated. 100pt when new user.
         self.__total_spent: float = 0.0 # total amount spent on flights
         self.__flight_history = []  #list of Flight objects as Purchased Flight History
+        self.__vip = False #No VIP when new user.
+        self.__tag = user_tags[0]  # Silver when new user.
 
     #To display data from a class object to users
     def __str__(self):
@@ -121,17 +125,20 @@ class User:
                 #f"{order_list_str}\n"
         )
 
-    # To display data from a class object to programmers
+    # To display summarised data for customers
     def __repr__(self):
+        if self.__vip is False:
+            self.__vip = 'No'
+        else:
+            self.__vip = 'Yes'
         return (f"# --------------- #\n"
+                f"ID: {self.__id}\n"
                 f"Name: {self.__first_name.title()} {self.__last_name.title()}\n"
-                f"Email: {self.__email}\n"
-                f"Phone Number: {self.__phone_number}\n"
-                f"Date of Birth: {self.__birth_date}\n"
-                f"Address: {self.__address} {self.__city}\n"
-                # f"Reward Points: {self.__total_points}"
-                f"Flight History: {len(self.__flight_history)} flights\n"
-                # f"{order_list_str}\n"
+                f"VIP: {self.__vip}\n"
+                f"Total Flights: {len(self.__flight_history)}\n"
+                f"Total Spent: ${self.__total_spent}\n"
+                f"Reward Points: {self.__total_points}\n"
+                f"Reward Level: {self.__tag}\n"
                 )
 
     #User Getters:
@@ -254,7 +261,7 @@ class UserManager:
 
     def display_user_list(self):
         for user in self.__user_list:
-            print(f"{user.__str__()}")
+            print(f"{user.__repr__()}")
 
     def add_user(self, user: User):
         self.__user_list.append(user)
@@ -521,7 +528,7 @@ class BookingManager:
 customer_list = UserManager("Customer Collection")
 agent_list = UserManager("Agent Collection")
 
-customer1 = User("CC", "Elle", "Doe", "test@t.com.au", "ElleD", "00000000000", None, None)
+customer1 = User("CC", "Elle", "Doe", "test@t.com.au", "ElleD", "00000000000", None)
 address1 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
 customer1.set_role(user_roles[0])
 customer1.set_password('Abc123')
@@ -530,7 +537,7 @@ customer1.set_id_fixed('C0f66')
 customer1.set_address(address1)
 customer_list.add_user(customer1)
 
-customer2 = User("CC", "James", "Williams", "williams@t.com.au", "JD12", "111111", None, None)
+customer2 = User("CC", "James", "Williams", "williams@t.com.au", "JD12", "111111", None)
 address2 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
 customer2.set_role(user_roles[0])
 customer2.set_password('Abc123')
@@ -539,7 +546,7 @@ customer2.set_id_fixed('Cc618')
 customer2.set_address(address2)
 customer_list.add_user(customer2)
 
-agent1 = User("AA", "Flor", "Scolari", "flor@sco.com.au", "JD12", "111111", None, None)
+agent1 = User("AA", "Flor", "Scolari", "flor@sco.com.au", "JD12", "111111", None)
 address2 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
 agent1.set_role(user_roles[1])
 agent1.set_birth_date(date(1989, 1, 24))
@@ -711,7 +718,9 @@ def show_agent_menu():
 
 # --- AGENT > START Functions for Customer Management --- #
 def show_all_customers():
-    print("Here all customers will be shown.")
+    """prints the list of User objects (subset Customers): total number of customers & display customer details"""
+    print(customer_list)
+    customer_list.display_user_list()
 
 def filter_customers_by_city():
     print("Here customers filtered by City will be shown.")
@@ -837,7 +846,6 @@ class TestUserCreation(unittest.TestCase):
             email="",
             password="",
             phone_number="",
-            role="",
             birth_date=date.today()
         )
 
@@ -847,7 +855,6 @@ class TestUserCreation(unittest.TestCase):
         user.set_last_name("Albon")
         user.set_email("lalbol@example.com.au")
         user.set_password("aL123!")
-        user.set_role("customer")
         user.set_birth_date(date(1988, 9, 16))
 
         #3 Compare user details using getters
