@@ -9,7 +9,7 @@ Write your login function:
 ✅ Make sure it validates users correctly and distinguishes roles.
 
 Build main menu and role-based menus:
-Start with basic printout menus and input handlers, no features yet.
+✅ Start with basic printout menus and input handlers, no features yet.
 
 Implement simple features first:
 For example, list all flights for customers, list all customers for agents.
@@ -22,6 +22,12 @@ Add booking, create flight, add/remove customers, filtering, etc.
 
 Add advanced features:
 Loyalty points, automated tags, export to CSV.
+
+Documentation
+Update reference list & mention it to check it on GitHub
+
+Unit Test error
+Review if it is possible to fix that to avoid having error warnings
 
 Test extensively after each new feature
 This way you can catch errors early.
