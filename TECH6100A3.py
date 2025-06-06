@@ -525,7 +525,7 @@ class BookingManager:
 
 #🙋 2 Customers added to have data to handle when the program starts
 
-customer_list = UserManager("Customer Collection")
+customer_list = UserManager("Customer Database") #Customer Collection
 agent_list = UserManager("Agent Collection")
 
 customer1 = User("CC", "Elle", "Doe", "test@t.com.au", "ElleD", "00000000000", None)
