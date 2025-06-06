@@ -1,6 +1,8 @@
 # TECH6100 Assessment 3 Florencia Scolari ID 1847863 June 2025
 # Check the full project and references on the GitHub Public Repo https://github.com/florscolari/TECH6100A3.git
 
+# NOTE: You'll find the unit tests below the script to run the program. Thank you.
+
 # User for Testing Purposes:
 #todo: update testing user
 
@@ -573,6 +575,7 @@ booking3 = Booking(customer2.get_id(), flight2.get_flight_number(),booking_statu
 booking4 = Booking(customer2.get_id(), flight3.get_flight_number(),booking_status[0])
 
 def login():
+    """Asks for email & password and checks if they match against records store in user_list"""
     print(f"Enter 'cancel' to quit.")
 
     while True:
@@ -606,6 +609,16 @@ def login():
 
         except ValueError:
             print(f"❌ Try again or type 'cancel' to quit.")
+
+def login_with_arguments(test_email, test_password):
+    """ONLY FOR UNIT TEST PURPOSE: Asks for email & password and checks if they match against records store in
+    user_list"""
+    # Checks if email exists
+    for u in all_user_list.get_user_list():
+        if u.get_email().lower() == test_email.lower():
+            if u.get_password() == hash_password(test_password):
+                return u
+    return None
 
 #todo: to be continued here tomorrow morning
 def show_agent_menu():
@@ -648,7 +661,81 @@ def main():
             print("❌ Invalid option. Try again using from 0 to 2 to select an option.")
 
 
+# -------- START PROGRAM --------- #
 
-# -------- PROGRAM --------- #
 welcome()
 main()
+
+# -------- END PROGRAM --------- #
+
+# -------- START Unit Test  --------- #
+#import unittest
+class TestUserCreation(unittest.TestCase):
+    def test_add_user_customer(self):
+        """Unit Test #1: Checks user with role customer is created properly. Using User Class, setters & getters."""
+        #1 Create User object
+        user = User(
+            id="",
+            first_name="",
+            last_name="",
+            email="",
+            password="",
+            phone_number="",
+            role="",
+            birth_date=date.today()
+        )
+
+        #2 Set user details using setters
+        user.set_id_fixed("C000001")
+        user.set_first_name("Leon")
+        user.set_last_name("Albon")
+        user.set_email("lalbol@example.com.au")
+        user.set_password("aL123!")
+        user.set_role("customer")
+        user.set_birth_date(date(1988, 9, 16))
+
+        #3 Compare user details using getters
+        self.assertEqual(user.get_id(), 'C000001', "Expected ID to be C000001")
+
+class TestUserLogin(unittest.TestCase):
+    """Unit Test #2: Checks login outcome: to get the user with OK email & OK password, to get None with OK email &
+    WRONG password, and WRONG email & OK password."""
+    #1 Clean user list & add testing user type agent
+    def test_set_user(self):
+        all_user_list._user_list = []
+        all_user_list.add_user(agent1)
+
+    #2 Test OK email & OK password -> outcome: user
+    def test_login_correct_credentials(self):
+        result = login_with_arguments("flor@sco.com.au", "Abc123")
+        self.assertEqual(result.get_email(), agent1.get_email(), "Expected user")
+
+    #3 Test WRONG email & OK password -> outcome: None
+    def test_login_wrong_email(self):
+        result = login_with_arguments("agent@email.com", "Abc123")
+        self.assertIsNone(result, "Expected None")
+
+    #4 Test OK email & WRONG password -> outcome: None
+    def test_login_wrong_password(self):
+        result = login_with_arguments(agent1.get_email(), "TUY123")
+        self.assertIsNone(result, "Expected None")
+# -------- END Unit Test  --------- #
+
+# -------- START Run Unit Tests  --------- #
+"""To check the Unit Tests for this project: 
+. Comment the lines between # -------- PROGRAM --------- #
+. Search this text '#import unittest' & Remove the '#'   
+. Look at the lines below and remove the '#' from #if __name__ == '__main__': 
+. and from #    unittest.main()
+. Now you're able to run the unit tests 🙏
+. Run the tests
+
+Note: This has been the turn around that I found to have main script & unit tests running on the same file.
+Thank you"""
+
+#if __name__ == '__main__':  # Added to be able to run unit tests.
+#    unittest.main()
+
+# -------- END Run Unit Tests  --------- #
+
+## End of the script - 1847863 F. Scolari KBS June 2025 TECH6100 Assessment 3
