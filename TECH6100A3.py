@@ -595,6 +595,13 @@ def login():
             if not user:
                 raise ValueError("Email not found.")
 
+            break # at this point, email is OK. Now let's move to password loop
+
+        except ValueError as e:
+            print(f"❌ {e} Try again or type 'cancel' to quit.")
+
+    while True:
+        try:
             user_password = input('Enter your password: \n')
             if user_password.lower() == 'cancel':
                 print("Login canceled.")
@@ -607,8 +614,8 @@ def login():
             print("✅ Login successful.")
             return user
 
-        except ValueError:
-            print(f"❌ Try again or type 'cancel' to quit.")
+        except ValueError as e:
+            print(f"❌ {e} Try again or type 'cancel' to quit.")
 
 def login_with_arguments(test_email, test_password):
     """ONLY FOR UNIT TEST PURPOSE: Asks for email & password and checks if they match against records store in
