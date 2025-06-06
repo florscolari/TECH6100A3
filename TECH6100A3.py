@@ -634,8 +634,8 @@ def welcome():
     customer or travel agent."""
     print("-" * 40)
     print("🌎✈️ Welcome to Traveliverse ✈️🌎\n"
-          "Explore our offer of flights around Australia and beyond.\n"
-          "Login to access your account or create a new one\n")
+          "Explore our offer of flights around Australia and beyond.\n\n"
+          "Login to access or create a new account:\n")
 
 def main():
     """Starts the program & Displays the login feature"""
@@ -707,9 +707,9 @@ def show_agent_menu():
             print("You have exited Traveliverse. See you next time!")
             break
         else:
-            print("❌ Invalid option. Try again using from 0 to 9 to select an option.")
+            print("❌ Invalid option. Try again using C or F followed by numbers to select an option, or 0 to exit the program.")
 
-# --- START Functions for Customer Management --- #
+# --- AGENT > START Functions for Customer Management --- #
 def show_customer_menu():
     print("Here the menu for customers will be shown.")
 
@@ -736,9 +736,9 @@ def remove_customer():
 
 def export_customer_database():
     print("Here export csv file with current customer database will be shown.")
-# --- END Functions for Customer Management --- #
+# --- AGENT > END Functions for Customer Management --- #
 
-# --- START Functions for Flight Management --- #
+# --- AGENT > START Functions for Flight Management --- #
 def show_all_flights():
     print("Here all flights will be shown.")
 
@@ -754,12 +754,25 @@ def update_flight_status():
 def remove_flight():
     print("Here remove a flight steps  will be shown.")
 
-# --- END Functions for Flight Management --- #
+# --- AGENT > END Functions for Flight Management --- #
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # -------- START PROGRAM --------- #
 welcome()
 main()
-
 # -------- END PROGRAM --------- #
 
 # -------- START Unit Test  --------- #
