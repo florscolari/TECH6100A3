@@ -35,6 +35,8 @@ from datetime import datetime #to set datestamp when booking a flight
 import random #to create random combinations for flight seat assignation
 from datetime import date #to calculate dates/age
 
+
+
 # ------ START Datasets needed on Class Definition --------- #
 # User > Roles
 user_roles = ('customer', 'agent')
@@ -88,6 +90,138 @@ def calculate_age(dob):
 # input('year'). wrap all up as dob = date(dob.year, dob.month, dob.day)
 
 # ------ END Functions needed on Class Definition --------- #
+# ------ START ✈️ Flight Class --------- #
+class Flight:
+    def __init__(self, origin, destination, departure_time, arrival_time, price, points_by_flight, seats_available):
+        self.__flight_number = None
+        self.__origin: str = origin
+        self.__destination: str = destination
+        self.__departure_time: str = departure_time
+        self.__arrival_time: str = arrival_time
+        self.__price: float = price
+        self.__points_by_flight: int = points_by_flight
+        self.__seats_available: int = seats_available
+
+    # To display data from a class object to users
+    def __str__(self):
+        return (f"# --------------- #\n"
+                f"Flight Number: {self.__flight_number}\n"
+                f"Origin: {self.__origin}\n"
+                f"Destination: {self.__destination}\n"
+                f"Departure Time: {self.__departure_time}\n"
+                f"Arrival Time: {self.__arrival_time}\n"
+                f"Price: ${self.__price}\n"
+                f"Reward Points: {self.__points_by_flight} // Win them when booking it (limited "
+                f"offer).\n"
+                f"Seats Available: {self.__seats_available}\n"
+                )
+
+    # To display data from a class object to programmers
+    def __repr__(self):
+        return (f"------\n"
+                f"Flight Number: {self.__flight_number} : {type(self.__flight_number)}\n"
+                f"Origin: {self.__origin} : {type(self.__origin)}\n"
+                f"Destination: {self.__destination} : {type(self.__destination)}\n"
+                f"Departure Time: {self.__departure_time} : {type(self.__departure_time)}\n"
+                f"Arrival Time: {self.__arrival_time} : {type(self.__arrival_time)}\n"
+                f"Price: ${self.__price} : {type(self.__price)}\n"
+                f"Reward Points: ${self.__points_by_flight} : {type(self.__points_by_flight)}\n"
+                f"Seats Available: {self.__seats_available} : {type(self.__seats_available)}"
+        )
+
+    #Getters
+    def get_flight_number(self):
+        return self.__flight_number
+
+    def get_origin(self):
+        return self.__origin
+
+    def get_destination(self):
+        return self.__destination
+
+    def get_departure_time(self):
+        return self.__departure_time
+
+    def get_arrival_time(self):
+        return self.__arrival_time
+
+    def get_price(self):
+        return self.__price
+
+    def get_points_by_flight(self):
+        return self.__points_by_flight
+
+    def get_seats_available(self):
+        return self.__seats_available
+
+    #Setters
+    def set_flight_number(self):
+        """Generates unique IDs for flight numbers"""
+        item_type = "flight"
+        self.__flight_number = generate_short_id(item_type)
+
+    def set_flight_number_fixed(self, value):
+        """Hardcodes a fixed IDs for flight numbers... Only for populated data purposes"""
+        self.__flight_number = value
+
+    def set_origin(self, value):
+        self.__origin = value
+
+    def set_destination(self, value):
+        self.__destination = value
+
+    def set_departure_time(self, value):
+        self.__departure_time = value
+
+    def set_arrival_time(self, value):
+        self.__arrival_time = value
+
+    def set_price(self, value):
+        self.__price = value
+
+    def set_points_by_flight(self, value):
+        self.__points_by_flight = value
+
+    def set_seats_available(self, value):
+        self.__seats_available = value
+
+# ------ END ✈️ Flight Class --------- #
+
+# ------ START ✈️✈️ FLIGHT MANAGER Classes --------- #
+#todo: Adjust FlightManager Class
+class FlightManager:
+    def __init__(self, name):
+        self.__name = name
+        self.__flight_list = []
+        self.__total_flights = 0
+
+    #Getters
+    def get_name(self):
+        return self.__name
+
+    def get_flight_list(self):
+        return self.__flight_list
+
+    def get_total_flights(self):
+        return self.__total_flights
+
+    def __str__(self):
+        return (f"️️✈️️️  {self.__name}   ✈️\n\t"
+                f"Current flights: {self.__total_flights}\n")
+
+    def display_flight_list(self):
+        for flight in self.__flight_list:
+            print(f"{flight.__str__()}")
+
+    def add_flight(self, flight: Flight):
+        self.__flight_list.append(flight)
+        self.__total_flights += 1
+
+    def remove_flight(self, flight: Flight):
+        self.__flight_list.remove(flight)
+        self.__total_flights -= 1
+
+# ------ END ✈️✈️ FLIGHT MANAGER Classes --------- #
 
 # ------ START 🙋‍♀️️ User Class --------- #
 class User:
@@ -110,19 +244,31 @@ class User:
 
     #To display data from a class object to users
     def __str__(self):
-        #order_list_str = "\n".join([f"- ID: {order.get_order_id()}\tItems: {order.get_total_items()}\tAmount: $"
-         #                           f"{order.get_total_amount()}\tDate:"
-          #                          f" {order.get_order_date()}"
-           #                         for order in self.__order_history])
+        flight_list_str = "\n".join([f"- ID: {flight.get_id()}\tFrom: {flight.get_origin()}\tFrom: "
+                                     f"{flight.get_destination()}\tAmount: $"
+                                     f"{flight.get_price()}\t"
+                                    for flight in self.__flight_history])
         return (f"# --------------- #\n"
+                
+                f"ID: {self.__id}\n"
                 f"Name: {self.__first_name.title()} {self.__last_name.title()}\n"
+                f"VIP: {self.__vip}\n\n"
+                f"▸Personal Details:\n"
+                f"Date of Birth: {self.__birth_date}\n"
+                f"Age:[Age needs to be calculated and added]\n\n" #todo:Age needs to be calculated and added
+                f"▸Contact Details:\n"
                 f"Email: {self.__email}\n"
                 f"Phone Number: {self.__phone_number}\n"
-                f"Date of Birth: {self.__birth_date}\n"
-                f"Address: {self.__address} {self.__city}\n"
-                #f"Reward Points: {self.__total_points}"
-                f"Flight History: {len(self.__flight_history)} flights\n"
-                #f"{order_list_str}\n"
+                f"Address: {self.__address} {self.__city}\n\n"                
+                f"▸Transaction Details:\n"
+                f"Total Flights: {len(self.__flight_history)}\n"
+                f"Total Spent: ${self.__total_spent}\n\n"
+                f"▸Reward Program Details:\n"
+                f"Total Points: {self.__total_points}\n"
+                f"Level: {self.__tag}\n\n"
+
+                f"Flight List: {len(self.__flight_history)} flights\n"
+                f"{flight_list_str}\n"
         )
 
     # To display summarised data for customers
@@ -273,138 +419,7 @@ class UserManager:
 
 # ------ END 🙋‍♀️🙋️ USER MANAGER Classes --------- #
 
-# ------ START ✈️ Flight Class --------- #
-class Flight:
-    def __init__(self, origin, destination, departure_time, arrival_time, price, points_by_flight, seats_available):
-        self.__flight_number = None
-        self.__origin: str = origin
-        self.__destination: str = destination
-        self.__departure_time: str = departure_time
-        self.__arrival_time: str = arrival_time
-        self.__price: float = price
-        self.__points_by_flight: int = points_by_flight
-        self.__seats_available: int = seats_available
 
-    # To display data from a class object to users
-    def __str__(self):
-        return (f"# --------------- #\n"
-                f"Flight Number: {self.__flight_number}\n"
-                f"Origin: {self.__origin}\n"
-                f"Destination: {self.__destination}\n"
-                f"Departure Time: {self.__departure_time}\n"
-                f"Arrival Time: {self.__arrival_time}\n"
-                f"Price: ${self.__price}\n"
-                f"Reward Points: {self.__points_by_flight} // Win them when booking it (limited "
-                f"offer).\n"
-                f"Seats Available: {self.__seats_available}\n"
-                )
-
-    # To display data from a class object to programmers
-    def __repr__(self):
-        return (f"------\n"
-                f"Flight Number: {self.__flight_number} : {type(self.__flight_number)}\n"
-                f"Origin: {self.__origin} : {type(self.__origin)}\n"
-                f"Destination: {self.__destination} : {type(self.__destination)}\n"
-                f"Departure Time: {self.__departure_time} : {type(self.__departure_time)}\n"
-                f"Arrival Time: {self.__arrival_time} : {type(self.__arrival_time)}\n"
-                f"Price: ${self.__price} : {type(self.__price)}\n"
-                f"Reward Points: ${self.__points_by_flight} : {type(self.__points_by_flight)}\n"
-                f"Seats Available: {self.__seats_available} : {type(self.__seats_available)}"
-        )
-
-    #Getters
-    def get_flight_number(self):
-        return self.__flight_number
-
-    def get_origin(self):
-        return self.__origin
-
-    def get_destination(self):
-        return self.__destination
-
-    def get_departure_time(self):
-        return self.__departure_time
-
-    def get_arrival_time(self):
-        return self.__arrival_time
-
-    def get_price(self):
-        return self.__price
-
-    def get_points_by_flight(self):
-        return self.__points_by_flight
-
-    def get_seats_available(self):
-        return self.__seats_available
-
-    #Setters
-    def set_flight_number(self):
-        """Generates unique IDs for flight numbers"""
-        item_type = "flight"
-        self.__flight_number = generate_short_id(item_type)
-
-    def set_flight_number_fixed(self, value):
-        """Hardcodes a fixed IDs for flight numbers... Only for populated data purposes"""
-        self.__flight_number = value
-
-    def set_origin(self, value):
-        self.__origin = value
-
-    def set_destination(self, value):
-        self.__destination = value
-
-    def set_departure_time(self, value):
-        self.__departure_time = value
-
-    def set_arrival_time(self, value):
-        self.__arrival_time = value
-
-    def set_price(self, value):
-        self.__price = value
-
-    def set_points_by_flight(self, value):
-        self.__points_by_flight = value
-
-    def set_seats_available(self, value):
-        self.__seats_available = value
-
-# ------ END ✈️ Flight Class --------- #
-
-# ------ START ✈️✈️ FLIGHT MANAGER Classes --------- #
-#todo: Adjust FlightManager Class
-class FlightManager:
-    def __init__(self, name):
-        self.__name = name
-        self.__flight_list = []
-        self.__total_flights = 0
-
-    #Getters
-    def get_name(self):
-        return self.__name
-
-    def get_flight_list(self):
-        return self.__flight_list
-
-    def get_total_flights(self):
-        return self.__total_flights
-
-    def __str__(self):
-        return (f"️️✈️️️  {self.__name}   ✈️\n\t"
-                f"Current flights: {self.__total_flights}\n")
-
-    def display_flight_list(self):
-        for flight in self.__flight_list:
-            print(f"{flight.__str__()}")
-
-    def add_flight(self, flight: Flight):
-        self.__flight_list.append(flight)
-        self.__total_flights += 1
-
-    def remove_flight(self, flight: Flight):
-        self.__flight_list.remove(flight)
-        self.__total_flights -= 1
-
-# ------ END ✈️✈️ FLIGHT MANAGER Classes --------- #
 
 # ------ START 📗 Booking Class --------- #
 class Booking:
@@ -729,7 +744,21 @@ def filter_customers_by_age_range():
     print("Here customers filtered by age will be shown.")
 
 def show_customer_by_id():
-    print("Here customer search by id will be shown.")
+    """Checks a customer by its ID & retrieves the customer details"""
+    while True:
+        print("Enter Customer ID or Cancel: ")
+        choice = input().upper().strip()
+
+        if choice == "CANCEL":
+            break
+
+        for custUser in customer_list.get_user_list():
+            if custUser.get_id().upper().strip() == choice:
+                print(custUser)
+                return
+
+        print("❌ Invalid option. Please select a valid one.")
+
 
 def add_customer():
     print("Here add a customer steps will be shown.")
