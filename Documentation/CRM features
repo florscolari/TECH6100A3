@@ -19,20 +19,24 @@ Customers can:
 
 🧑‍💼 COMPANY AGENT FEATURES
 Agents can:
-1. View All Customers
+🙋Customers:
+1. View Customers (view all)
 2. Filter Customers by Address
 3. Filter Customers by Age Range
-4. Search Customer by ID
-5.View Customer Details by ID
+4. Search Customer (by ID) -> View Customer Details by ID
 6. Add customer
-7. Remove customer by ID
-8.Export Single Customer to CSV
+7. Remove customer (by ID)
+            --> leave it lowest priority -> 8.Export Single Customer to CSV
+9.Export All Customer Data to CSV
 
+✈️ Flights
 9. View All Flights
-10. Add New Flight
-11. Edit/Delete Flights
-12. View Customer Tags
-13. Export All Customer Data to CSV
+10. Add Flight
+11. Remove Flight
+13. Update flight status
+
+-- Set it but leave it as lowest priority --> View Customer Tags
+
 
 14.Logout
 

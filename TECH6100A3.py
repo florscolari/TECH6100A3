@@ -611,7 +611,9 @@ def login():
             if user.get_password() != hash_password(user_password):
                 raise ValueError("Incorrect password.")
 
-            print("✅ Login successful.")
+            print("✅ Login successful.\n")
+            print("-"*20)
+            print(f"Welcome {user.get_first_name()}!")
             return user
 
         except ValueError as e:
@@ -626,16 +628,6 @@ def login_with_arguments(test_email, test_password):
             if u.get_password() == hash_password(test_password):
                 return u
     return None
-
-#todo: to be continued here tomorrow morning
-def show_agent_menu():
-    print("Here the menu for agents will be shown.")
-
-def show_customer_menu():
-    print("Here the menu for customers will be shown.")
-
-def create_user_account():
-    print("Here the user account creation will be shown.")
 
 def welcome():
     """To welcome the user when starting the program. As Flight CRM, login is required to browse the site as
@@ -667,9 +659,104 @@ def main():
         else:
             print("❌ Invalid option. Try again using from 0 to 2 to select an option.")
 
+def show_agent_menu():
+    """Displays the menu options for AGENTS"""
+    while True:
+        print(f"Enter an option:")
+        print(f"🙋‍ Customers:\n"
+              f"C1. View Customers\n"
+              f"C2. Filter Customers by City Address\n"
+              f"C3. Filter Customers by Age range\n"
+              f"C4. Search a Customer\n"
+              f"C5. Add Customer\n"
+              f"C6. Remove Customer\n"
+              f"C7. Export Customer Database\n\n"
+              f"✈️ Flights:\n"
+              f"F1. View Flights\n"
+              f"F2. Search a Flight\n"
+              f"F3. Register New Flight\n"
+              f"F4. Update Flight Status\n"
+              f"F5. Remove Flight\n\n"
+              f"0. Exit Program\n")
+        user_choice = input("Select an option: ").strip().capitalize()
+        if user_choice == "C1":
+            show_all_customers()
+        elif user_choice == "C2":
+            filter_customers_by_city()
+        elif user_choice == "C3":
+            filter_customers_by_age_range()
+        elif user_choice == "C4":
+            show_customer_by_id()
+        elif user_choice == "C5":
+            add_customer()
+        elif user_choice == "C6":
+            remove_customer()
+        elif user_choice == "C7":
+           export_customer_database()
+        elif user_choice == "F1":
+            show_all_flights()
+        elif user_choice == "F2":
+            show_flight_by_id()
+        elif user_choice == "F3":
+            add_flight()
+        elif user_choice == "F4":
+            update_flight_status()
+        elif user_choice == "F5":
+            remove_flight()
+        elif user_choice == "0":
+            print("You have exited Traveliverse. See you next time!")
+            break
+        else:
+            print("❌ Invalid option. Try again using from 0 to 9 to select an option.")
+
+# --- START Functions for Customer Management --- #
+def show_customer_menu():
+    print("Here the menu for customers will be shown.")
+
+def create_user_account():
+    print("Here the user account creation will be shown.")
+
+def show_all_customers():
+    print("Here all customers will be shown.")
+
+def filter_customers_by_city():
+    print("Here customers filtered by City will be shown.")
+
+def filter_customers_by_age_range():
+    print("Here customers filtered by age will be shown.")
+
+def show_customer_by_id():
+    print("Here customer search by id will be shown.")
+
+def add_customer():
+    print("Here add a customer steps will be shown.")
+
+def remove_customer():
+    print("Here remove a customer steps will be shown.")
+
+def export_customer_database():
+    print("Here export csv file with current customer database will be shown.")
+# --- END Functions for Customer Management --- #
+
+# --- START Functions for Flight Management --- #
+def show_all_flights():
+    print("Here all flights will be shown.")
+
+def show_flight_by_id():
+    print("Here flight search by id will be shown.")
+
+def add_flight():
+    print("Here add flight steps will be shown.")
+
+def update_flight_status():
+    print("Here update flight status by id will be shown.")
+
+def remove_flight():
+    print("Here remove a flight steps  will be shown.")
+
+# --- END Functions for Flight Management --- #
 
 # -------- START PROGRAM --------- #
-
 welcome()
 main()
 
