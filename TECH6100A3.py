@@ -19,7 +19,6 @@
 # 1. Global command to cancel an ongoing task.
 # 2. No user input validation for: phone, email & shipping address.
 # 3. Turning back for case: If user selects she/he has an account and doesn't know username & password, no way to recover from that. Dead End.
-# 4. Login as different user types at tge beginning. You can create account & login to place an order.
 # 5. Although I have set __str__ & __repr__ for Book, Order & User, I've used __str__ in most cases instead of __repr__
 
 
@@ -677,7 +676,7 @@ def show_agent_menu():
               f"F3. Register New Flight\n"
               f"F4. Update Flight Status\n"
               f"F5. Remove Flight\n\n"
-              f"0. Exit Program\n")
+              f"0. Logout\n")
         user_choice = input("Select an option: ").strip().capitalize()
         if user_choice == "C1":
             show_all_customers()
@@ -690,7 +689,7 @@ def show_agent_menu():
         elif user_choice == "C5":
             add_customer()
         elif user_choice == "C6":
-            remove_customer()
+            remove_customer_by_id()
         elif user_choice == "C7":
            export_customer_database()
         elif user_choice == "F1":
@@ -704,18 +703,13 @@ def show_agent_menu():
         elif user_choice == "F5":
             remove_flight()
         elif user_choice == "0":
-            print("You have exited Traveliverse. See you next time!")
+            print("✅ You have successfully logout.\n")
+            welcome()
             break
         else:
-            print("❌ Invalid option. Try again using C or F followed by numbers to select an option, or 0 to exit the program.")
+            print("❌ Invalid option. Try again using C or F followed by numbers to select an option, or 0 to logout.")
 
 # --- AGENT > START Functions for Customer Management --- #
-def show_customer_menu():
-    print("Here the menu for customers will be shown.")
-
-def create_user_account():
-    print("Here the user account creation will be shown.")
-
 def show_all_customers():
     print("Here all customers will be shown.")
 
@@ -731,7 +725,7 @@ def show_customer_by_id():
 def add_customer():
     print("Here add a customer steps will be shown.")
 
-def remove_customer():
+def remove_customer_by_id():
     print("Here remove a customer steps will be shown.")
 
 def export_customer_database():
@@ -756,8 +750,61 @@ def remove_flight():
 
 # --- AGENT > END Functions for Flight Management --- #
 
+def show_customer_menu():
+    """Displays the menu options for CUSTOMERS"""
+    while True:
+        print(f"Enter an option:")
+        print(f"1. View Available Flights\n"
+              f"2. Book a Flight\n"
+              f"3. View My Bookings\n"
+              f"4. My Profile\n"
+              f"5. Delete Account\n"
+              f"0. Logout\n")
+        user_choice = input("Select an option: ").strip()
+        if user_choice == "1":
+            show_all_flights()
+        elif user_choice == "2":
+            book_flight()
+        elif user_choice == "3":
+            show_customer_bookings()
+        elif user_choice == "4":
+            show_customer_profile()
+        elif user_choice == "5":
+            remove_customer()
+        elif user_choice == "0":
+            print("✅ You have successfully logout.\n")
+            welcome()
+            break
+        else:
+            print("❌ Invalid option. Try again using from 1 to 5 to select an option, or 0 to logout.")
+
+# --- CUSTOMER > START Functions --- #
+#show_all_flights() will be reused for both users
+
+def book_flight():
+    print("Here book flight steps will be shown.")
+
+def show_customer_bookings():
+    print("Here bookings for the logged in customer (like orders on A2) will be shown.")
+
+def show_customer_profile():
+    print("Here customer profile details will be shown: attributes from User object + reward points")
+
+def remove_customer():
+    print("Here remove customer -> it should take the id from the user logged")
+
+# --- CUSTOMER > END Functions --- #
 
 
+
+
+
+
+
+
+
+def create_user_account():
+    print("Here the user account creation will be shown.")
 
 
 
