@@ -1021,7 +1021,6 @@ def display_booking_list_by_id(current_user):
 def show_customer_profile(current_user):
     print(current_user.__str__())
 
-
 def remove_customer(current_user):
     print("Are you sure you want to delete your account? Everything will be lost.\n")
     while True:
