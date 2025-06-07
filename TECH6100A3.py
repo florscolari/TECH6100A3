@@ -631,6 +631,7 @@ all_user_list = UserManager("All Users") # to login validation purposes
 all_user_list.add_user(customer1)
 all_user_list.add_user(customer2)
 all_user_list.add_user(agent1)
+
 #✈️ 3 Flights added
 flight_list = FlightManager("Available Flights") # Flight Collection
 flight1 = Flight('Perth', 'Sydney', '9:25', '0:35', 489, 240, 9)
@@ -639,10 +640,6 @@ flight3 = Flight('Canberra', 'Perth', '4:37', '7:56', 420, 220, 8)
 flight1.set_flight_number()
 flight2.set_flight_number()
 flight3.set_flight_number()
-
-#flight1.set_flight_number_fixed('F53e0')
-#flight2.set_flight_number_fixed('F53e1')
-#flight3.set_flight_number_fixed('F53e2')
 
 flight_list.add_flight(flight1)
 flight_list.add_flight(flight2)
