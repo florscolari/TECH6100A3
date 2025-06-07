@@ -34,8 +34,7 @@ import hashlib #to handle passwords in a safer manner
 from datetime import datetime #to set datestamp when booking a flight
 import random #to create random combinations for flight seat assignation
 from datetime import date #to calculate dates/age
-
-
+from logging import exception
 
 # ------ START Datasets needed on Class Definition --------- #
 # User > Roles
@@ -240,15 +239,11 @@ class User:
         self.__total_spent: float = 0.0 # total amount spent on flights
         self.__flight_history = []  #list of Flight objects as Purchased Flight History
         self.__booking_list = []  # list of Booking objects this user has
-        self.__vip = False #No VIP when new user.
+        self.__vip = 'No' #No VIP when new user.
         self.__tag = user_tags[0]  # Silver when new user.
 
     #To display data from a class object to users
     def __str__(self):
-        if self.__vip is False:
-            self.__vip = 'No'
-        else:
-            self.__vip = 'Yes'
         flight_list_str = "\n".join([f"- ID: {flight.get_flight_number()}\tFrom: {flight.get_origin()}\tFrom: "
                                      f"{flight.get_destination()}\tAmount: $"
                                      f"{flight.get_price()}\t"
@@ -324,6 +319,9 @@ class User:
     def get_address(self):
         return self.__address
 
+    def get_vip(self):
+        return self.__vip
+
     def get_points(self):
         return self.__total_points
 
@@ -365,6 +363,9 @@ class User:
 
     def set_birth_date(self, value):
         self.__birth_date = value
+
+    def set_vip(self, value):
+        self.__vip = value
 
     def add_flight_to_flight_history(self, flight):
         self.__flight_history.append(flight)
@@ -949,14 +950,126 @@ def remove_customer():
 
 
 def create_user_account():
-    print("Here the user account creation will be shown.")
+    """Creates & Store on-fly a new customer user. Agents are added by Admin role (out of scope)"""
+    print(f"▸ Create your account ---")
+    print(f"Enter 'cancel' to quit.")
 
+    while True:
+        try:
+            new_email = input("Enter your email: \n").strip()
+            if new_email.lower() == 'cancel':
+                print("Account creation canceled.")
+                return None
 
+            if not new_email:
+                print("❌ Email is required. It cannot be empty.")
+                continue
 
+            # Checks if email exists
+            email_exists = False
+            for u in all_user_list.get_user_list():
+                if u.get_email().lower() == new_email.lower():
+                    email_exists = True
+                    break
 
+            if email_exists:
+                raise ValueError("❌ Email is already used. Try a different one.")
+            else:
+                break  # at this point, email is OK.
 
+        except ValueError as e:
+                print(f"❌ {e} Try again or type 'cancel' to quit.")
 
+    while True:
+            new_password = input('Enter your password: \n').strip()
+            if new_password.lower() == 'cancel':
+                print("Account creation canceled.")
+                return None
 
+            if not new_password:
+                print(f"❌ Password is required. It cannot be empty.")
+            else:
+                break  # at this point, password is OK.
+
+    print("Let's complete your profile.\nIt'll take 5-10 minutes.")
+    print("▸ Personal Details")
+    # First name
+    new_first_name = input('Enter first name: \n').strip()
+    if new_first_name.lower() == 'cancel':
+        print("Account creation canceled.")
+        return None
+
+    # Last name
+    new_last_name = input('Enter last name: \n')
+    if new_last_name.lower() == 'cancel':
+        print("Account creation canceled.")
+        return None
+
+    # Date of Birth
+    try:
+        new_day = int(input("Enter birth day (1-31): \n").strip())
+        new_month = int(input("Enter birth month (1-12): \n").strip())
+        new_year = int(input("Enter birth year (e.g. 1980): \n").strip())
+        birth_date = date(new_year, new_month, new_day)
+    except Exception:
+        print("❌ Invalid date. Account creation canceled")
+        return None
+
+    # Phone Number
+    try:
+        new_phone_number = int(input("Enter phone number: \n").strip())
+    except Exception:
+        print("❌ Invalid phone number. Account creation canceled")
+        return None
+
+    # Address
+    print("▸ Address Details")
+    street = input("Street address: \n").strip()
+    if street.lower() == 'cancel':
+        print("Account creation canceled.")
+        return None
+
+    city = input("City: \n").strip()
+    if city.lower() == 'cancel':
+        print("Account creation canceled.")
+        return None
+
+    state = input("State: \n").strip()
+    if state.lower() == 'cancel':
+        print("Account creation canceled.")
+        return None
+
+    zip_code = input("Zip Code: \n").strip()
+    if zip_code.lower() == 'cancel':
+        print("Account creation canceled.")
+        return None
+
+    country = input("Country: \n").strip()
+    if country.lower() == 'cancel':
+        print("Account creation canceled.")
+        return None
+
+    # Create User object (new customer)
+    new_address = Address(street, city, state, zip_code, country)
+    new_user = User(None, new_first_name, new_last_name, new_email, new_password, new_phone_number, birth_date)
+    new_user.set_role('customer')
+    new_user.set_password(new_password)
+    new_user.set_birth_date(birth_date)
+    new_user.set_id()
+    new_user.set_address(new_address)
+
+    # Adds User object (new customer) to the customer list
+    customer_list.add_user(new_user)
+    all_user_list.add_user(new_user)
+
+    # Displays successful message + New user logged in
+    print("✅ Account has been created successfully.\n")
+    print("-" * 20)
+    print(f"Welcome {new_user.get_first_name()}!")
+    if new_user.get_role() == 'agent':
+        return show_agent_menu()
+    else:
+        return show_customer_menu(new_user)
 
 
 
