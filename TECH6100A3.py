@@ -499,6 +499,9 @@ class Booking:
     def set_flight_seat(self):
         self.__flight_seat = generate_flight_seat()
 
+    def add_flight(self, value: Flight):
+        self.__flight = value
+
 # ------ END 📗 Booking Class --------- #
 
 # ------ START 📗📗️ BOOKING MANAGER Class --------- #
@@ -671,7 +674,7 @@ def main():
                     if user.get_role() == 'agent':
                         show_agent_menu()
                     else:
-                        show_customer_menu()
+                        show_customer_menu(user)
         elif user_choice == "2":
                 create_user_account()
         elif user_choice == "0":
@@ -790,8 +793,9 @@ def remove_flight():
 
 # --- AGENT > END Functions for Flight Management --- #
 
-def show_customer_menu():
+def show_customer_menu(user):
     """Displays the menu options for CUSTOMERS"""
+    current_customer_user = user
     while True:
         print(f"Enter an option:")
         print(f"1. View Available Flights\n"
@@ -804,7 +808,7 @@ def show_customer_menu():
         if user_choice == "1":
             show_all_flights()
         elif user_choice == "2":
-            book_flight()
+            book_flight(current_customer_user)
         elif user_choice == "3":
             show_customer_bookings()
         elif user_choice == "4":
@@ -821,8 +825,35 @@ def show_customer_menu():
 # --- CUSTOMER > START Functions --- #
 #show_all_flights() will be reused for both users
 
-def book_flight():
-    #show all flights available
+def book_flight(current_customer_user):
+    """prints the list of current books, add 1 book at a time through its ID based on user input. Displays Total Qty & $"""
+    user = current_customer_user
+    flight_default = flight1
+    current_booking = Booking(user.get_id(), flight_default, 'confirmed')
+    print("Select a flight from the list by typing its Flight Number:")
+    available_flights = flight_list.get_flight_list()
+    flight_list.display_flight_list()
+
+    choice = input().strip()
+
+    for flight in available_flights:
+        if flight.get_flight_number() == choice:
+            if flight.get_seats_available() != 0:
+                current_booking.add_flight(flight)
+                flight.set_seats_available((flight.get_seats_available() - 1))
+                print(f"✅ You've booked flight {flight.get_flight_number()} From {flight.get_origin()} to"
+                      f" {flight.get_destination()}\n"
+                      f"Total Paid: ${flight.get_price()}\n"
+                      f"Reward Points Earned: {flight.get_points_by_flight()}")
+                return
+            else:
+                print(
+                    "🙏 We're sorry. We don't have more seats available for this flight. Try with a different flight or "
+                    "click here to join the wait list.")
+                return
+    else:
+        print("❌ Invalid Flight Number. Please try again.")
+
 
     # Ask user input to select a flight by ID
 
