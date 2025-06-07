@@ -813,7 +813,7 @@ def show_agent_menu():
               f"C3. Filter Customers by Age range\n"
               f"C4. Search a Customer\n"
               f"C5. Add Customer\n"
-              f"C6. Remove Customer\n"
+              f"C6. Delete Customer\n"
               f"C7. Export Customer Database\n\n"
               f"✈️ Flights:\n"
               f"F1. View Flights\n"
@@ -1004,7 +1004,52 @@ def add_customer():
 
 
 def remove_customer_by_id():
-    print("Here remove a customer steps will be shown.")
+    """Removes customer user by its ID for all-user list & customer-list"""
+    user_selected = None
+    while True:
+        print("Enter Customer ID or Cancel: ")
+        choice = input().upper().strip()
+
+        if choice == "CANCEL":
+            return None
+
+        for custUser in customer_list.get_user_list():
+            if custUser.get_id().upper().strip() == choice:
+                user_selected = custUser
+                break
+
+        if user_selected:
+            break
+
+        print("❌ Invalid option. Please select a valid one.")
+
+
+    print(f"Are you sure you want to delete account {user_selected.get_id()} for {user_selected.get_first_name()} {user_selected.get_last_name()}?\nEverything will be lost.\n")
+    while True:
+        try:
+            choice = input("Enter 'delete' to delete your account or 'cancel' to quit. \n").strip()
+
+            # Inputs 'cancel'
+            if choice.lower() == 'cancel':
+                print("Account deletion canceled.\n")
+                return None
+
+            # Input is empty
+            if not choice:
+                print("❌ Input is required. Try again.")
+                continue
+
+            # Inputs 'delete'
+            if choice.lower() == 'delete':
+                customer_list.remove_user(user_selected)
+                all_user_list.remove_user(user_selected)
+                print(f"✅ You've deleted account {user_selected.get_id()} successfully.")
+                return show_agent_menu()
+
+        except ValueError as e:
+            print(f"❌ {e} Try again or type 'cancel' to quit.")
+
+
 
 def export_customer_database():
     print("Here export csv file with current customer database will be shown.")
