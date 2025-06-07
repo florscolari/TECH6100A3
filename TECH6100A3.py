@@ -107,7 +107,7 @@ class Flight:
                 f"Price: ${self.__price}\n"
                 f"Reward Points: {self.__points_by_flight} // Win them when booking it (limited "
                 f"offer).\n"
-                f"Seats Available: {self.__seats_available}\n"
+                f"Seats Available: {self.__seats_available}"
                 )
 
     # To display data from a class object to programmers
@@ -479,10 +479,11 @@ class UserManager:
 
 # ------ START 📗 Booking Class --------- #
 class Booking:
-    def __init__(self, user, flight: Flight, status):
+    def __init__(self, user: User, flight: Flight, status):
+            self.__user: User = user
             timestamp = datetime.now()
             self.__booking_number = None
-            self.__user_id: User = user
+            self.__user_id: str = user.get_id()
             self.__flight: Flight = flight
             self.__purchase_date: str = timestamp.strftime("%a %d %b %H:%M")
             self.__price_paid = None
@@ -525,6 +526,9 @@ class Booking:
     def get_booking_number(self):
         return self.__booking_number
 
+    def get_flight_number(self):
+        return self.__flight.get_flight_number()
+
     def get_purchase_date(self):
         return self.__purchase_date
 
@@ -533,6 +537,12 @@ class Booking:
 
     def get_user_id(self):
         return self.__user_id
+
+    def get_first_name(self):
+        return self.__user.get_first_name()
+
+    def get_last_name(self):
+        return self.__user.get_last_name()
 
     def get_points_by_flight(self):
         return self.__flight.get_points_by_flight()
@@ -596,7 +606,6 @@ class BookingManager:
         self.__total_bookings -= 1
 
 
-
 # ------ END 📗📗️ BOOKING MANAGER Class --------- #
 
 
@@ -654,10 +663,10 @@ flight_list.add_flight(flight3)
 
 #📗 4 Bookings added
 booking_list = BookingManager('Booking Collection')
-booking1 = Booking(customer1.get_id(), flight1, booking_status[0])
-booking2 = Booking(customer1.get_id(), flight2, booking_status[1])
-booking3 = Booking(customer2.get_id(), flight2,booking_status[1])
-booking4 = Booking(customer2.get_id(), flight3,booking_status[0])
+booking1 = Booking(customer1, flight1, booking_status[0])
+booking2 = Booking(customer1, flight2, booking_status[1])
+booking3 = Booking(customer2, flight2,booking_status[1])
+booking4 = Booking(customer2, flight3,booking_status[0])
 
 # Adds 4 bookings to the Booking Collection (available from View Bookings option)
 booking_list.add_booking(booking1)
@@ -1062,7 +1071,29 @@ def show_all_flights():
     flight_list.display_flight_list()
 
 def show_flight_by_id():
-    print("Here flight search by id will be shown.")
+    """Checks a flight by its ID & retrieves the flight details"""
+    while True:
+        print("Enter Flight ID or Cancel: ")
+        choice = input().strip()
+
+        if choice.upper() == "CANCEL":
+            break
+
+        for flight in flight_list.get_flight_list():
+            if flight.get_flight_number().strip() == choice:
+                total_bookings = []
+
+                for booking in booking_list.get_booking_list():
+                    if booking.get_flight_number() == choice:
+                        total_bookings.append(booking)
+
+                print(f"{flight}")
+                print(f"Bookings: {len(total_bookings)}")
+                for booking in total_bookings:
+                    print(f"- {booking.get_booking_number()}: {booking.get_first_name()} {booking.get_last_name()}")
+                return
+
+        print("❌ Invalid option. Please select a valid one.")
 
 def add_flight():
     print("Here add flight steps will be shown.")
@@ -1113,7 +1144,7 @@ def book_flight(current_user):
     user = current_user
     flight_default = flight1
     # Create a Booking object
-    current_booking = Booking(user.get_id(), flight_default, 'confirmed')
+    current_booking = Booking(user, flight_default, 'confirmed')
 
     # Ask user input to select a flight by flight number
     print("Select a flight from the list by typing its Flight Number:")
