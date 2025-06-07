@@ -231,7 +231,7 @@ class User:
         self.__email : str = email
         self.__password : str = password
         self.__phone_number: str = phone_number
-        self.__role : str = user_roles[0] # by default, this system creates Customer users. Agents are added by Admin (out of scope)
+        self.__role : str = '' # by default, this system creates Customer users. Agents are added by Admin (out of scope)
         self.__birth_date: date = birth_date # for age calculation / filtering
         self.__address = None #Applied concept of Composition
         self.__city = None
@@ -249,13 +249,12 @@ class User:
                                      f"{flight.get_price()}\t"
                                     for flight in self.__flight_history])
         return (f"# --------------- #\n"
-                
                 f"ID: {self.__id}\n"
                 f"Name: {self.__first_name.title()} {self.__last_name.title()}\n"
                 f"VIP: {self.__vip}\n\n"
                 f"▸Personal Details:\n"
                 f"Date of Birth: {self.__birth_date}\n"
-                f"Age:[Age needs to be calculated and added]\n\n" #todo:Age needs to be calculated and added
+                f"Age: {self.get_age()}\n\n"
                 f"▸Contact Details:\n"
                 f"Email: {self.__email}\n"
                 f"Phone Number: {self.__phone_number}\n"
@@ -273,10 +272,6 @@ class User:
 
     # To display summarised data for customers
     def __repr__(self):
-        if self.__vip is False:
-            self.__vip = 'No'
-        else:
-            self.__vip = 'Yes'
         return (f"# --------------- #\n"
                 f"ID: {self.__id}\n"
                 f"Name: {self.__first_name.title()} {self.__last_name.title()}\n"
@@ -316,10 +311,18 @@ class User:
     def get_role(self):
         return self.__role
 
+    def get_dob(self):
+        return self.__birth_date
+
+    def get_age(self):
+        today = date.today()
+        age = today.year - self.__birth_date.year
+        return age
+
     def get_address(self):
         return self.__address
 
-    def get_vip(self):
+    def get_vip_status(self):
         return self.__vip
 
     def get_points(self):
@@ -364,11 +367,28 @@ class User:
     def set_birth_date(self, value):
         self.__birth_date = value
 
-    def set_vip(self, value):
-        self.__vip = value
+    def update_vip_status(self):
+        """Sets VIP as Yes if Customer has > 3 flights && > 600 as amount spent"""
+        if len(self.__flight_history) > 4 and self.__total_spent > 1200:
+            self.__vip = '🏆 Yes'
+        else:
+            self.__vip = 'No'
+
+    def update_tag_level(self):
+        """Updates Reward Program Level based on points earned with flights/bookings"""
+        num_flights = len(self.__flight_history)
+
+        if 0 <= num_flights <= 1:
+            self.__tag = user_tags[0] #Silver
+        elif 2 <= num_flights <= 4:
+            self.__tag = user_tags[1] # Premium
+        elif num_flights >= 5:
+            self.__tag = user_tags[2] # Black
 
     def add_flight_to_flight_history(self, flight):
         self.__flight_history.append(flight)
+        self.update_vip_status()
+        self.update_tag_level()
 
     def add_booking_to_booking_list(self, booking):
         self.__booking_list.append(booking)
