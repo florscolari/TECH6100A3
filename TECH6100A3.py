@@ -82,11 +82,6 @@ def calculate_age(dob):
     age = today.year - dob.year
     return age
 
-# Example birth date
-#birth_date = date(1990, 5, 15)
-#age = calculate_age(birth_date)
-#todo: when ask for date of birth: ask for dob.day = input('day'), then dob.month = input('month'), then dob.year =
-# input('year'). wrap all up as dob = date(dob.year, dob.month, dob.day)
 
 # ------ END Functions needed on Class Definition --------- #
 # ------ START ✈️ Flight Class --------- #
@@ -641,19 +636,24 @@ flight_list = FlightManager("Available Flights") # Flight Collection
 flight1 = Flight('Perth', 'Sydney', '9:25', '0:35', 489, 240, 9)
 flight2 = Flight('Sydney', 'Canberra', '8:13', '9:40', 112, 45, 4)
 flight3 = Flight('Canberra', 'Perth', '4:37', '7:56', 420, 220, 8)
-flight1.set_flight_number_fixed('F53e0')
-flight2.set_flight_number_fixed('F53e1')
-flight3.set_flight_number_fixed('F53e2')
+flight1.set_flight_number()
+flight2.set_flight_number()
+flight3.set_flight_number()
+
+#flight1.set_flight_number_fixed('F53e0')
+#flight2.set_flight_number_fixed('F53e1')
+#flight3.set_flight_number_fixed('F53e2')
+
 flight_list.add_flight(flight1)
 flight_list.add_flight(flight2)
 flight_list.add_flight(flight3)
 
 #📗 4 Bookings added
 booking_list = BookingManager('Booking Collection')
-booking1 = Booking(customer1.get_id(), flight1.get_flight_number(),booking_status[0])
-booking2 = Booking(customer1.get_id(), flight2.get_flight_number(),booking_status[1])
-booking3 = Booking(customer2.get_id(), flight2.get_flight_number(),booking_status[1])
-booking4 = Booking(customer2.get_id(), flight3.get_flight_number(),booking_status[0])
+booking1 = Booking(customer1.get_id(), flight1, booking_status[0])
+booking2 = Booking(customer1.get_id(), flight2, booking_status[1])
+booking3 = Booking(customer2.get_id(), flight2,booking_status[1])
+booking4 = Booking(customer2.get_id(), flight3,booking_status[0])
 
 # Adds 4 bookings to the Booking Collection (available from View Bookings option)
 booking_list.add_booking(booking1)
@@ -930,7 +930,7 @@ def show_customer_menu(user):
         elif user_choice == "4":
             show_customer_profile()
         elif user_choice == "5":
-            remove_customer()
+            remove_customer(current_user)
         elif user_choice == "0":
             print("✅ You have successfully logout.\n")
             welcome()
@@ -1021,8 +1021,28 @@ def display_booking_list_by_id(current_user):
 def show_customer_profile():
     print("Here customer profile details will be shown: attributes from User object + reward points")
 
-def remove_customer():
-    print("Here remove customer -> it should take the id from the user logged")
+def remove_customer(current_user):
+    print("Are you sure you want to delete your account? Everything will be lost.\n")
+    while True:
+        try:
+            choice = input("Enter 'delete' to delete your account or 'cancel' to quit. \n").strip()
+            if choice.lower() == 'cancel':
+                print("Account deletion canceled.\n")
+                return None
+
+            if not choice:
+                print("❌ Input is required. Try again.")
+                continue
+
+            # Checks if email exists
+            if choice.lower() == 'delete':
+                customer_list.remove_user(current_user)
+                all_user_list.remove_user(current_user)
+                print("✅ You've deleted your account successfully.")
+                return main()
+
+        except ValueError as e:
+                print(f"❌ {e} Try again or type 'cancel' to quit.")
 
 # --- CUSTOMER > END Functions --- #
 
