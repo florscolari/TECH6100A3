@@ -655,6 +655,65 @@ booking2 = Booking(customer1.get_id(), flight2.get_flight_number(),booking_statu
 booking3 = Booking(customer2.get_id(), flight2.get_flight_number(),booking_status[1])
 booking4 = Booking(customer2.get_id(), flight3.get_flight_number(),booking_status[0])
 
+# Adds 4 bookings to the Booking Collection (available from View Bookings option)
+booking_list.add_booking(booking1)
+booking_list.add_booking(booking2)
+booking_list.add_booking(booking3)
+booking_list.add_booking(booking4)
+
+# Sets Booking number x 4 bookings
+booking1.set_booking_number(flight1.get_flight_number())
+booking2.set_booking_number(flight2.get_flight_number())
+booking3.set_booking_number(flight2.get_flight_number())
+booking4.set_booking_number(flight3.get_flight_number())
+
+# Passes the price paid for these 4 flights to each booking record
+booking1.set_price_paid(flight1.get_price())
+booking2.set_price_paid(flight2.get_price())
+booking3.set_price_paid(flight2.get_price())
+booking4.set_price_paid(flight3.get_price())
+
+# Sets flight seat for each booking x 4
+booking1.set_flight_seat()
+booking2.set_flight_seat()
+booking3.set_flight_seat()
+booking4.set_flight_seat()
+
+# Adds bookings to User's booking list (flight history) x 2 customers
+customer1.add_flight_to_flight_history(flight1)
+customer1.add_flight_to_flight_history(flight2)
+customer2.add_flight_to_flight_history(flight2)
+customer2.add_flight_to_flight_history(flight3)
+
+# Sums reward points to this user
+#Customer1
+customer1_points = customer1.get_points()
+flight1_points = flight1.get_points_by_flight()
+flight2_points = flight2.get_points_by_flight()
+customer1_updated_points = customer1_points + flight1_points + flight2_points
+customer1.add_points(customer1_updated_points)
+
+#Customer2
+customer2_points = customer2.get_points()
+flight3_points = flight3.get_points_by_flight()
+customer2_updated_points = customer2_points + flight2_points + flight3_points
+customer2.add_points(customer2_updated_points)
+
+# Adds flight's price to the User's total spent amount
+#Customer1
+customer1_spent = customer1.get_total_spent()
+flight1_price = flight1.get_price()
+flight2_price = flight2.get_price()
+customer1_updated_spent = customer1_spent + flight1_price + flight2_price
+customer1.add_total_spent(customer1_updated_spent)
+
+#Customer2
+customer2_spent = customer2.get_total_spent()
+flight3_price = flight3.get_price()
+customer2_updated_spent = customer2_spent + flight2_price + flight3_price
+customer2.add_total_spent(customer2_updated_spent)
+
+
 def login():
     """Asks for email & password and checks if they match against records store in user_list"""
     print(f"Enter 'cancel' to quit.")
