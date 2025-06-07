@@ -928,7 +928,7 @@ def show_customer_menu(user):
         elif user_choice == "3":
             display_booking_list_by_id(current_user)
         elif user_choice == "4":
-            show_customer_profile()
+            show_customer_profile(current_user)
         elif user_choice == "5":
             remove_customer(current_user)
         elif user_choice == "0":
@@ -1018,8 +1018,9 @@ def display_booking_list_by_id(current_user):
         print(booking)
 
 
-def show_customer_profile():
-    print("Here customer profile details will be shown: attributes from User object + reward points")
+def show_customer_profile(current_user):
+    print(current_user.__str__())
+
 
 def remove_customer(current_user):
     print("Are you sure you want to delete your account? Everything will be lost.\n")
@@ -1169,7 +1170,6 @@ def create_user_account():
         return show_agent_menu()
     else:
         return show_customer_menu(new_user)
-
 
 
 
