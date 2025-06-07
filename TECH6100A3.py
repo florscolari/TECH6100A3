@@ -834,7 +834,7 @@ def show_agent_menu():
         elif user_choice == "C5":
             add_customer() # Done
         elif user_choice == "C6":
-            remove_customer_by_id()
+            remove_customer_by_id() # Done
         elif user_choice == "C7":
            export_customer_database()
         elif user_choice == "F1":
