@@ -312,6 +312,12 @@ class User:
     def get_address(self):
         return self.__address
 
+    def get_points(self):
+        return self.__total_points
+
+    def get_total_spent(self):
+        return self.__total_spent
+
     def get_flight_history(self):
         return self.__flight_history
 
@@ -345,8 +351,14 @@ class User:
     def set_birth_date(self, value):
         self.__birth_date = value
 
-    def add_flight(self, flight):
+    def add_flight_to_flight_history(self, flight):
         self.__flight_history.append(flight)
+
+    def add_total_spent(self, value):
+        self.__total_spent = value
+
+    def add_points(self, value):
+        self.__total_points = value
 
     """Set Address if is within Address class. If not -> show message"""
     def set_address(self,value):
@@ -827,9 +839,14 @@ def show_customer_menu(user):
 
 def book_flight(current_customer_user):
     """prints the list of current books, add 1 book at a time through its ID based on user input. Displays Total Qty & $"""
+    global user
     user = current_customer_user
+    print(f"current user: {user}")
     flight_default = flight1
+    # Create a Booking object
     current_booking = Booking(user.get_id(), flight_default, 'confirmed')
+
+    # Ask user input to select a flight by flight number
     print("Select a flight from the list by typing its Flight Number:")
     available_flights = flight_list.get_flight_list()
     flight_list.display_flight_list()
@@ -839,12 +856,35 @@ def book_flight(current_customer_user):
     for flight in available_flights:
         if flight.get_flight_number() == choice:
             if flight.get_seats_available() != 0:
+                # Add that flight to the booking object
                 current_booking.add_flight(flight)
+                # Discount one seat available to the flight
                 flight.set_seats_available((flight.get_seats_available() - 1))
                 print(f"✅ You've booked flight {flight.get_flight_number()} From {flight.get_origin()} to"
                       f" {flight.get_destination()}\n"
                       f"Total Paid: ${flight.get_price()}\n"
                       f"Reward Points Earned: {flight.get_points_by_flight()}")
+
+                # Adds this order to the Order Collection (available from View Orders option)
+                booking_list.add_booking(current_booking)
+
+                # Adds this booking to User's booking list (flight history)
+                user.add_flight_to_flight_history(flight)
+
+                # Sums reward points to this user
+                user_current_points = user.get_points()
+                flight_points = flight.get_points_by_flight()
+                user_updated_points = user_current_points + flight_points
+                user.add_points(user_updated_points)
+
+                # Adds flight's price to the User's total spent amount
+                user_current_spent = user.get_total_spent()
+                flight_price = flight.get_price()
+                user_updated_spent = user_current_spent + flight_price
+                user.add_total_spent(user_updated_spent)
+
+                #todo: remove the line below after working on View My Bookings
+                print(f"User's bookings: {user.get_flight_history()}")
                 return
             else:
                 print(
@@ -853,19 +893,6 @@ def book_flight(current_customer_user):
                 return
     else:
         print("❌ Invalid Flight Number. Please try again.")
-
-
-    # Ask user input to select a flight by ID
-
-    # Create a Booking object
-
-    # Add that flight to a booking
-
-    # Add this flight to flight history for this user
-
-    # Discount one seat available to the flight
-
-    # Sum reward points to this user
 
 
 
