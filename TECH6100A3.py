@@ -74,7 +74,7 @@ def generate_flight_seat():
     random_number = random.choice(seat_number)
 
     # Concatenate both
-    flight_seat = random_letter + random_number
+    flight_seat = random_letter + str(random_number)
     return flight_seat
 
 def calculate_age(dob):
@@ -239,12 +239,17 @@ class User:
         self.__total_points: int = 100 #loyalty points accumulated. 100pt when new user.
         self.__total_spent: float = 0.0 # total amount spent on flights
         self.__flight_history = []  #list of Flight objects as Purchased Flight History
+        self.__booking_list = []  # list of Booking objects this user has
         self.__vip = False #No VIP when new user.
         self.__tag = user_tags[0]  # Silver when new user.
 
     #To display data from a class object to users
     def __str__(self):
-        flight_list_str = "\n".join([f"- ID: {flight.get_id()}\tFrom: {flight.get_origin()}\tFrom: "
+        if self.__vip is False:
+            self.__vip = 'No'
+        else:
+            self.__vip = 'Yes'
+        flight_list_str = "\n".join([f"- ID: {flight.get_flight_number()}\tFrom: {flight.get_origin()}\tFrom: "
                                      f"{flight.get_destination()}\tAmount: $"
                                      f"{flight.get_price()}\t"
                                     for flight in self.__flight_history])
@@ -287,6 +292,13 @@ class User:
                 f"Reward Level: {self.__tag}\n"
                 )
 
+    def display_flight_history(self):
+        flight_list_str = "\n".join([f"- ID: {flight.get_flight_number()}\tFrom: {flight.get_origin()}\tTo: "
+                                     f"{flight.get_destination()}\tAmount: $"
+                                     f"{flight.get_price()}\t"
+                                     for flight in self.__flight_history])
+        print(f"Booking List: {len(self.__flight_history)} flights\n"
+            f"{flight_list_str}\n")
     #User Getters:
     def get_id(self):
         return self.__id
@@ -321,6 +333,9 @@ class User:
     def get_flight_history(self):
         return self.__flight_history
 
+    def get_booking_list(self):
+        return self.__booking_list
+
     # User Setters:
     def set_id(self):
         item_type = "user"
@@ -353,6 +368,12 @@ class User:
 
     def add_flight_to_flight_history(self, flight):
         self.__flight_history.append(flight)
+
+    def add_booking_to_booking_list(self, booking):
+        self.__booking_list.append(booking)
+
+    def clear_booking_list(self):
+        self.__booking_list = []
 
     def add_total_spent(self, value):
         self.__total_spent = value
@@ -449,34 +470,32 @@ class Booking:
     def __str__(self):
         return (f"# --------------- #\n"
                 f"Booking Number: {self.__booking_number}\n"
+                f"Status: {self.__status}\n"
                 f"Purchased on: {self.__purchase_date}\n"
-                f"Paid: {self.__price_paid}"
-                f"Reward Points Won: {self.__flight.get_points_by_flight()}"
-                f"Status: {self.__status}"
-                f"# ------- Flight Details -------- #\n"
+                f"Paid: ${self.__price_paid}\n"
+                f"▸ Flight Details\n"
                 f"Flight Number: {self.__flight.get_flight_number()}\n"
-                f"Origin: {self.__flight.get_origin()}\n"
+                f"Origin: {self.__flight.get_origin()}\t"
                 f"Destination: {self.__flight.get_destination()}\n"
-                f"Departure Time: {self.__flight.get_departure_time()}\n"
+                f"Departure Time: {self.__flight.get_departure_time()}\t"
                 f"Arrival Time: {self.__flight.get_arrival_time()}\n"
-                f"Seat: {self.__flight_seat}"
+                f"Seat: {self.__flight_seat}\n"
                 )
 
     # To display data from a class object to programmers
     def __repr__(self):
-        return (f"------\n"
-                f"Booking Number: {self.__booking_number} : {type(self.__booking_number)}\n"
-                f"Purchased on: {self.__purchase_date} : {type(self.__purchase_date)}\n"
-                f"Paid: {self.__price_paid} : {type(self.__price_paid)}"
-                f"Reward Points Won: {self.__flight.get_points_by_flight()} : {type(self.__flight.get_points_by_flight())}"
-                f"Status: {self.__status} : {type(self.__status)}"
-                f"# ------- Flight Details -------- #\n"
-                f"Flight Number: {self.__flight.get_flight_number() : {type(self.__flight.get_flight_number())}}\n"
-                f"Origin: {self.__flight.get_origin()} : {type(self.__flight.get_origin())}\n"
-                f"Destination: {self.__flight.get_destination() : {type(self.__flight.get_destination())}}\n"
-                f"Departure Time: {self.__flight.get_departure_time()} : {type(self.__flight.get_departure_time())}\n"
-                f"Arrival Time: {self.__flight.get_arrival_time()} : {type(self.__flight.get_arrival_time())}\n"
-                f"Seat: {self.__flight_seat} : {type(self.__flight_seat)}"
+        return (f"# --------------- #\n"
+                  f"Booking Number: {self.__booking_number}\n"
+                f"Status: {self.__status}\n"
+                f"Purchased on: {self.__purchase_date}\n"
+                f"Paid: ${self.__price_paid}\n"
+                f"▸ Flight Details\n"
+                f"Flight Number: {self.__flight.get_flight_number()}\n"
+                f"Origin: {self.__flight.get_origin()}\t"
+                f"Destination: {self.__flight.get_destination()}\n"
+                f"Departure Time: {self.__flight.get_departure_time()}\t"
+                f"Arrival Time: {self.__flight.get_arrival_time()}\n"
+                f"Seat: {self.__flight_seat}\n"
         )
 
     #Getters
@@ -489,6 +508,9 @@ class Booking:
     def get_price_paid(self):
         return self.__price_paid
 
+    def get_user_id(self):
+        return self.__user_id
+
     def get_points_by_flight(self):
         return self.__flight.get_points_by_flight()
 
@@ -497,7 +519,7 @@ class Booking:
 
     #Setters
     def set_booking_number(self, flight):
-        self.__booking_number = f"B{flight.get_flight_number()}"
+        self.__booking_number = f"B{flight}"
 
     def set_purchase_date(self, value):
         self.__purchase_date = value
@@ -549,6 +571,8 @@ class BookingManager:
     def remove_booking(self, booking: Booking):
         self.__booking_list.remove(booking)
         self.__total_bookings -= 1
+
+
 
 # ------ END 📗📗️ BOOKING MANAGER Class --------- #
 
@@ -807,7 +831,7 @@ def remove_flight():
 
 def show_customer_menu(user):
     """Displays the menu options for CUSTOMERS"""
-    current_customer_user = user
+    current_user = user
     while True:
         print(f"Enter an option:")
         print(f"1. View Available Flights\n"
@@ -820,9 +844,9 @@ def show_customer_menu(user):
         if user_choice == "1":
             show_all_flights()
         elif user_choice == "2":
-            book_flight(current_customer_user)
+            book_flight(current_user)
         elif user_choice == "3":
-            show_customer_bookings()
+            display_booking_list_by_id(current_user)
         elif user_choice == "4":
             show_customer_profile()
         elif user_choice == "5":
@@ -837,11 +861,10 @@ def show_customer_menu(user):
 # --- CUSTOMER > START Functions --- #
 #show_all_flights() will be reused for both users
 
-def book_flight(current_customer_user):
+def book_flight(current_user):
     """prints the list of current books, add 1 book at a time through its ID based on user input. Displays Total Qty & $"""
     global user
-    user = current_customer_user
-    print(f"current user: {user}")
+    user = current_user
     flight_default = flight1
     # Create a Booking object
     current_booking = Booking(user.get_id(), flight_default, 'confirmed')
@@ -863,10 +886,16 @@ def book_flight(current_customer_user):
                 print(f"✅ You've booked flight {flight.get_flight_number()} From {flight.get_origin()} to"
                       f" {flight.get_destination()}\n"
                       f"Total Paid: ${flight.get_price()}\n"
-                      f"Reward Points Earned: {flight.get_points_by_flight()}")
+                      f"Reward Points Earned: {flight.get_points_by_flight()}\n")
 
-                # Adds this order to the Order Collection (available from View Orders option)
+                # Adds this booking to the Booking Collection (available from View Bookings option)
                 booking_list.add_booking(current_booking)
+                # Set Booking number
+                current_booking.set_booking_number(flight.get_flight_number())
+                # Pass the price paid for this flight to the booking record
+                current_booking.set_price_paid(flight.get_price())
+                # Set flight seat for this booking
+                current_booking.set_flight_seat()
 
                 # Adds this booking to User's booking list (flight history)
                 user.add_flight_to_flight_history(flight)
@@ -883,8 +912,6 @@ def book_flight(current_customer_user):
                 user_updated_spent = user_current_spent + flight_price
                 user.add_total_spent(user_updated_spent)
 
-                #todo: remove the line below after working on View My Bookings
-                print(f"User's bookings: {user.get_flight_history()}")
                 return
             else:
                 print(
@@ -894,10 +921,22 @@ def book_flight(current_customer_user):
     else:
         print("❌ Invalid Flight Number. Please try again.")
 
+def display_booking_list_by_id(current_user):
+    """prints the list of bookings/flights for the current user: total number of flights & display booking details"""
 
+    # Clear list of booking before appending the latest number of bookings for this user
+    current_user.clear_booking_list()
 
-def show_customer_bookings():
-    print("Here bookings for the logged in customer (like orders on A2) will be shown.")
+    # Checks bookings from the list and append when they match with current user's id
+    for booking in booking_list.get_booking_list():
+        if current_user.get_id() == booking.get_user_id():
+                    current_user.add_booking_to_booking_list(booking)
+
+    # Prints the list of bookings that the logged user has
+    print(f"You have {len(current_user.get_booking_list())} bookings:")
+    for booking in current_user.get_booking_list():
+        print(booking)
+
 
 def show_customer_profile():
     print("Here customer profile details will be shown: attributes from User object + reward points")
@@ -906,12 +945,6 @@ def remove_customer():
     print("Here remove customer -> it should take the id from the user logged")
 
 # --- CUSTOMER > END Functions --- #
-
-
-
-
-
-
 
 
 
