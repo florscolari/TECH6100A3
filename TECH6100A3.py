@@ -248,12 +248,12 @@ class User:
                 f"Name: {self.__first_name.title()} {self.__last_name.title()}\n"
                 f"VIP: {self.__vip}\n\n"
                 f"▸Personal Details:\n"
-                f"Date of Birth: {self.__birth_date}\n"
+                f"Date of Birth: {self.__birth_date.day}-{self.__birth_date.month}-{self.__birth_date.year}\n"
                 f"Age: {self.get_age()}\n\n"
                 f"▸Contact Details:\n"
                 f"Email: {self.__email}\n"
                 f"Phone Number: {self.__phone_number}\n"
-                f"Address: {self.__address} {self.__city}\n\n"                
+                f"Address: {self.__address}\n"                
                 f"▸Transaction Details:\n"
                 f"Total Flights: {len(self.__flight_history)}\n"
                 f"Total Spent: ${self.__total_spent}\n\n"
@@ -316,6 +316,9 @@ class User:
 
     def get_address(self):
         return self.__address
+
+    def get_city(self):
+        return self.__address.get_city()
 
     def get_vip_status(self):
         return self.__vip
@@ -415,6 +418,10 @@ class Address:
     def __str__(self):
         return (f"{self.__street.title()} {self.__city.title()} {self.__state.upper()} ({self.__zip_code})"
                 f" {self.__country.title()}")
+
+    def get_city(self):
+        return self.__city
+
 # ------ END 🙋‍♀️️ USER Class --------- #
 
 # ------ START 🙋‍♀️🙋 USER MANAGER Class --------- #
@@ -817,7 +824,7 @@ def show_agent_menu():
               f"0. Logout\n")
         user_choice = input("Select an option: ").strip().capitalize()
         if user_choice == "C1":
-            show_all_customers()
+            show_all_customers() # Done
         elif user_choice == "C2":
             filter_customers_by_city()
         elif user_choice == "C3":
@@ -831,7 +838,7 @@ def show_agent_menu():
         elif user_choice == "C7":
            export_customer_database()
         elif user_choice == "F1":
-            show_all_flights()
+            show_all_flights() # Done
         elif user_choice == "F2":
             show_flight_by_id()
         elif user_choice == "F3":
@@ -877,7 +884,124 @@ def show_customer_by_id():
 
 
 def add_customer():
-    print("Here add a customer steps will be shown.")
+    """Creates & Store on-fly a new customer user. Agents are added by Admin role (out of scope)"""
+    print(f"▸ Create new customer user \n"
+          f"Use this only to support users by phone they can't create accounts by themselves.")
+    print(f"Enter 'cancel' to quit.")
+
+    while True:
+        try:
+            new_email = input("Enter email: \n").strip()
+            if new_email.lower() == 'cancel':
+                print("Account creation canceled.")
+                return None
+
+            if not new_email:
+                print("❌ Email is required. It cannot be empty.")
+                continue
+
+            # Checks if email exists
+            email_exists = False
+            for u in all_user_list.get_user_list():
+                if u.get_email().lower() == new_email.lower():
+                    email_exists = True
+                    break
+
+            if email_exists:
+                raise ValueError("❌ Email is already used. Try a different one.")
+            else:
+                break  # at this point, email is OK.
+
+        except ValueError as e:
+            print(f"❌ {e} Try again or type 'cancel' to quit.")
+
+    while True:
+        new_password = input('Enter password: \n').strip()
+        if new_password.lower() == 'cancel':
+            print("Account creation canceled.")
+            return None
+
+        if not new_password:
+            print(f"❌ Password is required. It cannot be empty.")
+        else:
+            break  # at this point, password is OK.
+
+    print("Complete customer's profile.\n")
+    print("▸ Personal Details")
+    # First name
+    new_first_name = input('First name: \n').strip()
+    if new_first_name.lower() == 'cancel':
+        print("Account creation canceled.")
+        return None
+
+    # Last name
+    new_last_name = input('Last name: \n')
+    if new_last_name.lower() == 'cancel':
+        print("Account creation canceled.")
+        return None
+
+    # Date of Birth
+    try:
+        new_day = int(input("Birth day (1-31): \n").strip())
+        new_month = int(input("Birth month (1-12): \n").strip())
+        new_year = int(input("Birth year (e.g. 1980): \n").strip())
+        birth_date = date(new_year, new_month, new_day)
+    except Exception:
+        print("❌ Invalid date. Account creation canceled")
+        return None
+
+    # Phone Number
+    try:
+        new_phone_number = int(input("Phone number: \n").strip())
+    except Exception:
+        print("❌ Invalid phone number. Account creation canceled")
+        return None
+
+    # Address
+    print("▸ Address Details")
+    street = input("Street address: \n").strip()
+    if street.lower() == 'cancel':
+        print("Account creation canceled.")
+        return None
+
+    city = input("City: \n").strip()
+    if city.lower() == 'cancel':
+        print("Account creation canceled.")
+        return None
+
+    state = input("State: \n").strip()
+    if state.lower() == 'cancel':
+        print("Account creation canceled.")
+        return None
+
+    zip_code = input("Zip Code: \n").strip()
+    if zip_code.lower() == 'cancel':
+        print("Account creation canceled.")
+        return None
+
+    country = input("Country: \n").strip()
+    if country.lower() == 'cancel':
+        print("Account creation canceled.")
+        return None
+
+    # Create User object (new customer)
+    new_address = Address(street, city, state, zip_code, country)
+    new_user = User(None, new_first_name, new_last_name, new_email, new_password, new_phone_number, birth_date)
+    new_user.set_role('customer')
+    new_user.set_password(new_password)
+    new_user.set_birth_date(birth_date)
+    new_user.set_id()
+    new_user.set_address(new_address)
+
+    # Adds User object (new customer) to the customer list
+    customer_list.add_user(new_user)
+    all_user_list.add_user(new_user)
+
+    # Displays successful message
+    print("✅ New customer account has been created successfully.\n")
+    print("-" * 20)
+    return new_user
+
 
 def remove_customer_by_id():
     print("Here remove a customer steps will be shown.")
@@ -1161,7 +1285,7 @@ def create_user_account():
     # Displays successful message + New user logged in
     print("✅ Account has been created successfully.\n")
     print("-" * 20)
-    print(f"Welcome {new_user.get_first_name()}!")
+    print(f"Welcome {new_user.get_first_name().title()}!")
     if new_user.get_role() == 'agent':
         return show_agent_menu()
     else:
