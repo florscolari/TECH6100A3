@@ -830,9 +830,9 @@ def show_agent_menu():
         elif user_choice == "C3":
             filter_customers_by_age_range()
         elif user_choice == "C4":
-            show_customer_by_id()
+            show_customer_by_id() # Done
         elif user_choice == "C5":
-            add_customer()
+            add_customer() # Done
         elif user_choice == "C6":
             remove_customer_by_id()
         elif user_choice == "C7":
