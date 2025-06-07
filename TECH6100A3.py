@@ -822,7 +822,21 @@ def show_customer_menu():
 #show_all_flights() will be reused for both users
 
 def book_flight():
-    print("Here book flight steps will be shown.")
+    #show all flights available
+
+    # Ask user input to select a flight by ID
+
+    # Create a Booking object
+
+    # Add that flight to a booking
+
+    # Add this flight to flight history for this user
+
+    # Discount one seat available to the flight
+
+    # Sum reward points to this user
+
+
 
 def show_customer_bookings():
     print("Here bookings for the logged in customer (like orders on A2) will be shown.")
@@ -858,6 +872,7 @@ def create_user_account():
 
 
 # -------- START PROGRAM --------- #
+
 welcome()
 main()
 # -------- END PROGRAM --------- #
