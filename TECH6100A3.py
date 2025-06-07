@@ -922,7 +922,7 @@ def book_flight(current_user):
         print("❌ Invalid Flight Number. Please try again.")
 
 def display_booking_list_by_id(current_user):
-    """prints the list of bookings/flights for the current user: total number of flights & display booking details"""
+    """prints the list of bookings/flights for the current user: total number of bookings & display booking details"""
 
     # Clear list of booking before appending the latest number of bookings for this user
     current_user.clear_booking_list()
