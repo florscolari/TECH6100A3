@@ -46,7 +46,7 @@ user_roles = ('customer', 'agent')
 user_tags = ('Silver','Premium', 'Black')
 
 # Booking > Status
-booking_status = ('confirmed', 'canceled')
+booking_status = ('Confirmed', 'Canceled')
 
 # ------ END Datasets needed on Class Definition --------- #
 
@@ -733,7 +733,8 @@ all_user_list.add_user(customer4)
 all_user_list.add_user(customer5)
 all_user_list.add_user(agent1)
 
-#✈️ 3 Flights added
+#✈️ 6 Flights added
+# 3 Past Date
 available_flight_manager = FlightManager("Available Flights") # Available Flights Collection
 all_flight_manager = FlightManager("All Flights") # All Flights Collection
 flight1 = Flight(date(2024, 12, 10), 'Perth', 'Sydney', '9:25', '0:35', 489, 240, 9)
@@ -746,6 +747,18 @@ flight3.set_flight_number()
 all_flight_manager.add_flight(flight1)
 all_flight_manager.add_flight(flight2)
 all_flight_manager.add_flight(flight3)
+
+# 3 Current Date
+flight4 = Flight(date(2025, 6, 23), 'Perth', 'Bali', '9:25', '0:35', 280, 140, 12)
+flight5 = Flight(date(2025, 8, 17), 'Bali', 'Perth', '4:13', '7:15', 280, 140, 2)
+flight6 = Flight(date(2025, 12, 10), 'Perth', 'Broome', '4:37', '9:56', 420, 220, 4)
+flight4.set_flight_number()
+flight5.set_flight_number()
+flight6.set_flight_number()
+
+all_flight_manager.add_flight(flight4)
+all_flight_manager.add_flight(flight5)
+all_flight_manager.add_flight(flight6)
 
 #📗 4 Bookings added
 booking_list = BookingManager('Booking Collection')
