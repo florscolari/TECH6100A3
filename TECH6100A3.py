@@ -34,7 +34,7 @@ import hashlib #to handle passwords in a safer manner
 from datetime import datetime #to set datestamp when booking a flight
 import random #to create random combinations for flight seat assignation
 from datetime import date #to calculate dates/age
-from logging import exception
+import csv #to export customer data to a CSV file
 
 # ------ START Datasets needed on Class Definition --------- #
 # User > Roles
@@ -1061,7 +1061,41 @@ def remove_customer_by_id():
 
 
 def export_customer_database():
-    print("Here export csv file with current customer database will be shown.")
+    print(f"You are just about exporting the customer database")
+    while True:
+        try:
+            file_name_raw = input("Enter a name for the csv file or 'cancel' to quit. \n").strip()
+            file_name = file_name_raw.replace(" ", "") #to clean the name of the file
+            # Inputs 'cancel'
+            if file_name.lower() == 'cancel':
+                print("Exporting CSV file canceled.\n")
+                return None
+
+            # Input is empty
+            if not file_name:
+                print("❌ Input is required. Try again.")
+                continue
+            break
+        except ValueError as e:
+            print(f"❌ {e} Try again or type 'cancel' to quit.")
+
+    # Gets the list of All User objects
+    data = customer_list.get_user_list()
+
+    # Formats dataset as dictionary, so it can be export as csv or json in the future. Also easier to scale down or up
+    # attributes
+    dict_data = [{
+        'ID': user.get_id()
+    } for user in data]
+    # todo: how to not print passwords? should I replace them with '**'? when csv creation?
+
+    with open(f'./{file_name}.csv', 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=dict_data[0].keys())
+        writer.writeheader()
+        writer.writerows(dict_data)
+    print(f"✅ {file_name}.csv has been created successfully.")
+    return show_agent_menu()
+
 # --- AGENT > END Functions for Customer Management --- #
 
 # --- AGENT > START Functions for Flight Management --- #
