@@ -46,7 +46,7 @@ user_roles = ('customer', 'agent')
 user_tags = ('Silver','Premium', 'Black')
 
 # Booking > Status
-booking_status = ('confirmed', 'cancelled')
+booking_status = ('confirmed', 'canceled')
 
 # ------ END Datasets needed on Class Definition --------- #
 
