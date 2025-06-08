@@ -1264,37 +1264,90 @@ def show_flight_by_id():
         print("❌ Invalid option. Please select a valid one.")
 
 def add_flight():
-    def add_customer():
-        """Creates & Store on-fly a new customer user. Agents are added by Admin role (out of scope)"""
-        print(f"▸ Create new customer user \n"
-              f"Use this only to support users by phone they can't create accounts by themselves.")
-        print(f"Enter 'cancel' to quit.")
+    """Creates a new object of class Flight & Adds it to the flight manager list"""
 
-        while True:
+    #todo: add date to a flight
+    print(f"▸ Create a new flight")
+    print(f"Enter 'cancel' to quit.")
+    while True:
             try:
-                new_email = input("Enter email: \n").strip()
-                if new_email.lower() == 'cancel':
-                    print("Account creation canceled.")
+                # Flight Date
+                print("Flight Date:")
+                try:
+                    new_day = int(input("Day (1-31): \n").strip())
+                    new_month = int(input("Month (1-12): \n").strip())
+                    new_year = int(input("Year (e.g. 2025): \n").strip())
+                    flight_date = date(new_year, new_month, new_day)
+                except ValueError:
+                    print("❌ Invalid date. Flight creation canceled")
                     return None
 
-                if not new_email:
-                    print("❌ Email is required. It cannot be empty.")
+                #Origin
+                new_origin = input("Enter origin: \n").strip()
+                if new_origin.lower() == 'cancel':
+                    print("Flight creation canceled.")
+                    return None
+
+                # Flight_number Checker not needed because it's using generator id after.
+
+                #Destination
+                new_destination = input("Enter destination: \n").strip()
+                if new_destination.lower() == 'cancel':
+                    print("Flight creation canceled.")
+                    return None
+                if not new_destination:
+                    print("❌ Destination is required. It cannot be empty.")
+                    continue
+                if not new_origin:
+                    print("❌ Origin is required. It cannot be empty.")
                     continue
 
-                # Checks if email exists
-                email_exists = False
-                for u in all_user_list.get_user_list():
-                    if u.get_email().lower() == new_email.lower():
-                        email_exists = True
-                        break
+                # Departure Time
+                new_departure_time = input("Departure Time (24-format, e.g. 9:45): \n").strip()
+                if new_departure_time.lower() == 'cancel':
+                    print("Flight creation canceled.")
+                    return None
+                if not new_departure_time:
+                    print("❌ Departure Time is required. It cannot be empty.")
+                    continue
 
-                if email_exists:
-                    raise ValueError("❌ Email is already used. Try a different one.")
-                else:
-                    break  # at this point, email is OK.
+                # Arrival Time
+                new_arrival_time = input("Arrival Time (24-format, e.g. 9:45): \n").strip()
+                if new_arrival_time.lower() == 'cancel':
+                    print("Flight creation canceled.")
+                    return None
+                if not new_arrival_time:
+                    print("❌ Arrival Time is required. It cannot be empty.")
+                    continue
+
+                # Price
+                try:
+                    new_price = float(input("Price (e.g. 128.25): \n").strip())
+                except ValueError:
+                    print("❌ Invalid Price value. Flight creation canceled")
+                    return None
+
+                # Points
+                try:
+                    new_points_by_flight = int(input("Reward Points (e.g. 120): \n").strip())
+                except ValueError:
+                    print("❌ Invalid Reward point value. Flight creation canceled")
+                    return None
+
+                # Available seats
+                try:
+                    new_available_seats = int(input("Available Seats: (e.g. 24): \n").strip())
+                except ValueError:
+                    print("❌ Invalid Seat value. Flight creation canceled")
+                    return None
 
             except ValueError as e:
                 print(f"❌ {e} Try again or type 'cancel' to quit.")
+
+    new_flight = Flight('Perth', 'Sydney', '9:25', '0:35', 489, 240, 9)
+    flight_list.add_flight(new_flight)
+
+
 
         while True:
             new_password = input('Enter password: \n').strip()
@@ -1321,20 +1374,12 @@ def add_flight():
             print("Account creation canceled.")
             return None
 
-        # Date of Birth
-        try:
-            new_day = int(input("Birth day (1-31): \n").strip())
-            new_month = int(input("Birth month (1-12): \n").strip())
-            new_year = int(input("Birth year (e.g. 1980): \n").strip())
-            birth_date = date(new_year, new_month, new_day)
-        except Exception:
-            print("❌ Invalid date. Account creation canceled")
-            return None
+
 
         # Phone Number
         try:
             new_phone_number = int(input("Phone number: \n").strip())
-        except Exception:
+        except ValueError:
             print("❌ Invalid phone number. Account creation canceled")
             return None
 
