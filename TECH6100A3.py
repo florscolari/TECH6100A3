@@ -908,13 +908,13 @@ def show_agent_menu():
         elif user_choice == "F1":
             show_all_flights() # Done
         elif user_choice == "F2":
-            show_flight_by_id()
+            show_flight_by_id() # Done
         elif user_choice == "F3":
-            add_flight()
+            add_flight() # Done
         elif user_choice == "F4":
             update_flight_status()
         elif user_choice == "F5":
-            remove_flight()
+            remove_flight_by_flight_number() # Done
         elif user_choice == "0":
             print("✅ You have successfully logout.\n")
             welcome()
@@ -1371,8 +1371,52 @@ def add_flight():
 def update_flight_status():
     print("Here update flight status by id will be shown.")
 
-def remove_flight():
-    print("Here remove a flight steps  will be shown.")
+def remove_flight_by_flight_number():
+    """Removes a flight by its flight number from flight-list & Updates flight_status as 'Deleted' in all_flight_list"""
+    flight_selected = None
+    while True:
+        print("Enter Flight Number or Cancel: ")
+        choice = input().upper().strip()
+
+        if choice == "CANCEL":
+            return None
+
+        for flight in flight_list.get_flight_list():
+            if flight.get_flight_number().upper().strip() == choice:
+                flight_selected = flight
+                break
+
+        if flight_selected:
+            break
+
+        print("❌ Invalid option. Please select a valid one.")
+
+    print(
+        f"Are you sure you want to delete flight {flight_selected.get_flight_number()}: {flight_selected.get_origin()}-{flight_selected.get_destination()} on {flight_selected.get_flight_date()}?\n⚠️ Everything will be lost. Issues on Customer's side may occur.\n")
+    while True:
+        try:
+            choice = input("Enter 'delete' to delete your account or 'cancel' to quit. \n").strip()
+
+            # Inputs 'cancel'
+            if choice.lower() == 'cancel':
+                print("Flight deletion canceled.\n")
+                return None
+
+            # Input is empty
+            if not choice:
+                print("❌ Input is required. Try again.")
+                continue
+
+            # Inputs 'delete'
+            if choice.lower() == 'delete':
+                flight_list.remove_flight(flight_selected)
+                #todo: add another flightManager collection if I want to separate available flights from ALL flights
+                #user_selected.update_user_status()  # Marks as Deleted in All users database
+                print(f"✅ You've deleted flight {flight_selected.get_flight_number()} successfully.\n")
+                return None
+
+        except ValueError as e:
+            print(f"❌ {e} Try again or type 'cancel' to quit.")
 
 # --- AGENT > END Functions for Flight Management --- #
 
