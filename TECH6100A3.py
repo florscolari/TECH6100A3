@@ -90,6 +90,7 @@ def calculate_age(dob):
 class Flight:
     def __init__(self, flight_date, origin, destination, departure_time, arrival_time, price, points_by_flight, seats_available):
         self.__flight_number = None
+        self.__flight_status = "Confirmed"
         self.__flight_date: date = flight_date
         self.__origin: str = origin
         self.__destination: str = destination
@@ -103,6 +104,7 @@ class Flight:
     def __str__(self):
         return (f"# --------------- #\n"
                 f"Flight Number: {self.__flight_number}\n"
+                f"Flight Status: {self.__flight_status}\n"
                 f"Date of Flight: {self.__flight_date.day}-{self.__flight_date.month}-{self.__flight_date.year}\n"
                 f"Origin: {self.__origin}\n"
                 f"Destination: {self.__destination}\n"
@@ -118,6 +120,7 @@ class Flight:
     def __repr__(self):
         return (f"------\n"
                 f"Flight Number: {self.__flight_number} : {type(self.__flight_number)}\n"
+                f"Flight Status: {self.__flight_status}\n"
                 f"Date of Flight: {self.__flight_date.day}-{self.__flight_date.month}-{self.__flight_date.year}\n"
                 f"Origin: {self.__origin} : {type(self.__origin)}\n"
                 f"Destination: {self.__destination} : {type(self.__destination)}\n"
@@ -134,6 +137,9 @@ class Flight:
 
     def get_flight_date(self):
         return self.__flight_date
+
+    def get_flight_status(self):
+        return self.__flight_status
 
     def get_origin(self):
         return self.__origin
@@ -168,6 +174,9 @@ class Flight:
 
     def set_flight_date(self, value):
         self.__flight_date = value
+
+    def set_flight_status(self, value):
+        self.__flight_status = value
 
     def set_origin(self, value):
         self.__origin = value
@@ -212,7 +221,7 @@ class FlightManager:
 
     def __str__(self):
         return (f"️️✈️️️  {self.__name}   ✈️\n\t"
-                f"Current flights: {self.__total_flights}\n")
+                f"Total Flights: {self.__total_flights}\n")
 
     def display_flight_list(self):
         for flight in self.__flight_list:
@@ -225,6 +234,15 @@ class FlightManager:
     def remove_flight(self, flight: Flight):
         self.__flight_list.remove(flight)
         self.__total_flights -= 1
+
+    def get_flight_by_flight_number(self, flight_number):
+        for flight in self.__flight_list:
+            if flight.get_flight_number() == flight_number:
+                return flight
+        return None
+
+
+
 
 # ------ END ✈️✈️ FLIGHT MANAGER Classes --------- #
 
@@ -702,17 +720,18 @@ all_user_list.add_user(customer5)
 all_user_list.add_user(agent1)
 
 #✈️ 3 Flights added
-flight_list = FlightManager("Available Flights") # Flight Collection
-flight1 = Flight(date(2025, 7, 24), 'Perth', 'Sydney', '9:25', '0:35', 489, 240, 9)
-flight2 = Flight(date(2025, 9, 17), 'Sydney', 'Canberra', '8:13', '9:40', 112, 45, 4)
-flight3 = Flight(date(2025, 12, 10), 'Canberra', 'Perth', '4:37', '7:56', 420, 220, 8)
+available_flight_manager = FlightManager("Available Flights") # Available Flights Collection
+all_flight_manager = FlightManager("All Flights") # All Flights Collection
+flight1 = Flight(date(2024, 12, 10), 'Perth', 'Sydney', '9:25', '0:35', 489, 240, 9)
+flight2 = Flight(date(2025, 1, 17), 'Sydney', 'Canberra', '8:13', '9:40', 112, 45, 4)
+flight3 = Flight(date(2025, 4, 10), 'Canberra', 'Perth', '4:37', '7:56', 420, 220, 8)
 flight1.set_flight_number()
 flight2.set_flight_number()
 flight3.set_flight_number()
 
-flight_list.add_flight(flight1)
-flight_list.add_flight(flight2)
-flight_list.add_flight(flight3)
+all_flight_manager.add_flight(flight1)
+all_flight_manager.add_flight(flight2)
+all_flight_manager.add_flight(flight3)
 
 #📗 4 Bookings added
 booking_list = BookingManager('Booking Collection')
@@ -884,11 +903,12 @@ def show_agent_menu():
               f"C6. Delete Customer\n"
               f"C7. Export Customer Database\n\n"
               f"✈️ Flights:\n"
-              f"F1. View Flights\n"
+              f"F1. View Available Flights\n"
               f"F2. Search a Flight\n"
               f"F3. Register New Flight\n"
               f"F4. Update Flight Status\n"
-              f"F5. Remove Flight\n\n"
+              f"F5. Remove Flight\n"
+              f"F6. View All Flights\n\n"
               f"0. Logout\n")
         user_choice = input("Select an option: ").strip().capitalize()
         if user_choice == "C1":
@@ -906,7 +926,7 @@ def show_agent_menu():
         elif user_choice == "C7":
            export_customer_database() # Done
         elif user_choice == "F1":
-            show_all_flights() # Done
+            show_available_flights() # Done
         elif user_choice == "F2":
             show_flight_by_id() # Done
         elif user_choice == "F3":
@@ -915,6 +935,8 @@ def show_agent_menu():
             update_flight_status()
         elif user_choice == "F5":
             remove_flight_by_flight_number() # Done
+        elif user_choice == "F6":
+            show_all_flights() # Done
         elif user_choice == "0":
             print("✅ You have successfully logout.\n")
             welcome()
@@ -1014,14 +1036,14 @@ def add_customer():
         new_month = int(input("Birth month (1-12): \n").strip())
         new_year = int(input("Birth year (e.g. 1980): \n").strip())
         birth_date = date(new_year, new_month, new_day)
-    except Exception:
+    except ValueError:
         print("❌ Invalid date. Account creation canceled")
         return None
 
     # Phone Number
     try:
         new_phone_number = int(input("Phone number: \n").strip())
-    except Exception:
+    except ValueError:
         print("❌ Invalid phone number. Account creation canceled")
         return None
 
@@ -1139,7 +1161,7 @@ def export_active_customers_db():
     # Gets the list of Active Customer User objects
     data = customer_list.get_user_list()
 
-    # Formats dataset as dictionary, so it can be export as csv or json in the future. Also easier to scale down or up
+    # Formats dataset as dictionary, so it can be exported as csv or json in the future. Also, easier to scale down or up
     # attributes
     dict_data = [{
         'ID': user.get_id(),
@@ -1189,7 +1211,7 @@ def export_all_customers_db():
     # Gets the list of All User objects
     data = all_user_list.get_user_list()
 
-    # Formats dataset as dictionary, so it can be export as csv or json in the future. Also easier to scale down or up
+    # Formats dataset as dictionary, so it can be exported as csv or json in the future. Also, easier to scale down or up
     # attributes
     dict_data = [{
         'ID': user.get_id(),
@@ -1246,10 +1268,16 @@ def export_customer_database():
 # --- AGENT > END Functions for Customer Management --- #
 
 # --- AGENT > START Functions for Flight Management --- #
+def show_available_flights():
+    """prints the list of AVAILABLE Flight objects: total number of available flights & display flight details"""
+    print(available_flight_manager)
+    available_flight_manager.display_flight_list()
+
 def show_all_flights():
-    """prints the list of Flight objects: total number of available flights & display flight details"""
-    print(flight_list)
-    flight_list.display_flight_list()
+    """prints the list of ALL Flight objects: total number of flights & display flight details"""
+    print(all_flight_manager)
+    all_flight_manager.display_flight_list()
+
 
 def show_flight_by_id():
     """Checks a flight by its ID & retrieves the flight details"""
@@ -1260,7 +1288,7 @@ def show_flight_by_id():
         if choice.upper() == "CANCEL":
             break
 
-        for flight in flight_list.get_flight_list():
+        for flight in available_flight_manager.get_flight_list():
             if flight.get_flight_number().strip() == choice:
                 total_bookings = []
 
@@ -1276,8 +1304,10 @@ def show_flight_by_id():
 
         print("❌ Invalid option. Please select a valid one.")
 
+
 def add_flight():
     """Creates a new object of class Flight & Adds it to the flight manager list"""
+    global new_departure_time, new_arrival_time, new_price, new_points_by_flight, new_available_seats
     print(f"▸ Create a new flight")
     print(f"Enter 'cancel' to quit.")
     while True:
@@ -1361,7 +1391,14 @@ def add_flight():
     # Create Flight object (new flight)
     new_flight = Flight(new_flight_date, new_origin.title(), new_destination.title(), new_departure_time, new_arrival_time, new_price, new_points_by_flight, new_available_seats)
     new_flight.set_flight_number()
-    flight_list.add_flight(new_flight)
+    new_flight.set_flight_status("Confirmed") # it's set by default, but just in case
+
+    #Flight added to All Flights Collection
+    all_flight_manager.add_flight(new_flight)
+
+    # If Flight Date is Today and onwards -> added to Available Flights Collection
+    if new_flight.get_flight_date() >= date.today() and new_flight.get_flight_status() == "Confirmed":
+        available_flight_manager.add_flight(new_flight)
 
     # Displays successful message
     print(f"✅ New flight {new_flight.get_flight_number()} has been created successfully.\n")
@@ -1381,7 +1418,7 @@ def remove_flight_by_flight_number():
         if choice == "CANCEL":
             return None
 
-        for flight in flight_list.get_flight_list():
+        for flight in all_flight_manager.get_flight_list():
             if flight.get_flight_number().upper().strip() == choice:
                 flight_selected = flight
                 break
@@ -1409,10 +1446,9 @@ def remove_flight_by_flight_number():
 
             # Inputs 'delete'
             if choice.lower() == 'delete':
-                flight_list.remove_flight(flight_selected)
-                #todo: add another flightManager collection if I want to separate available flights from ALL flights
-                #user_selected.update_user_status()  # Marks as Deleted in All users database
-                print(f"✅ You've deleted flight {flight_selected.get_flight_number()} successfully.\n")
+                flight_selected.set_flight_status('Canceled')
+                available_flight_manager.remove_flight(flight_selected)
+                print(f"✅ You've removed flight {flight_selected.get_flight_number()} from available flights successfully. Now it will be shown as Canceled for Customers.\n")
                 return None
 
         except ValueError as e:
@@ -1433,7 +1469,7 @@ def show_customer_menu(user):
               f"0. Logout\n")
         user_choice = input("Select an option: ").strip()
         if user_choice == "1":
-            show_all_flights()
+            show_available_flights()
         elif user_choice == "2":
             book_flight(current_user)
         elif user_choice == "3":
@@ -1450,7 +1486,7 @@ def show_customer_menu(user):
             print("❌ Invalid option. Try again using from 1 to 5 to select an option, or 0 to logout.")
 
 # --- CUSTOMER > START Functions --- #
-#show_all_flights() will be reused for both users
+#show_available_flights() will be reused for both users
 
 def book_flight(current_user):
     """prints the list of current books, add 1 book at a time through its ID based on user input. Displays Total Qty & $"""
@@ -1462,8 +1498,8 @@ def book_flight(current_user):
 
     # Ask user input to select a flight by flight number
     print("Select a flight from the list by typing its Flight Number:")
-    available_flights = flight_list.get_flight_list()
-    flight_list.display_flight_list()
+    available_flights = available_flight_manager.get_flight_list()
+    available_flight_manager.display_flight_list()
 
     choice = input().strip()
 
