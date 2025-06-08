@@ -18,6 +18,8 @@
 
 # 1. Global command to cancel an ongoing task.
 # 2. System creates Customer users by default. Agents are added by Admin role (out of scope)
+# 3. When flight is removed from Agent's side, no notifications or Actions are taken on Customer's side
+# 4. Reward points aren't assigned based on conditions (they're set by the agent user)
 
 # 2. No user input validation for: phone, email & shipping address.
 # 3. Turning back for case: If user selects she/he has an account and doesn't know username & password, no way to recover from that. Dead End.
@@ -701,9 +703,9 @@ all_user_list.add_user(agent1)
 
 #✈️ 3 Flights added
 flight_list = FlightManager("Available Flights") # Flight Collection
-flight1 = Flight('Perth', 'Sydney', '9:25', '0:35', 489, 240, 9)
-flight2 = Flight('Sydney', 'Canberra', '8:13', '9:40', 112, 45, 4)
-flight3 = Flight('Canberra', 'Perth', '4:37', '7:56', 420, 220, 8)
+flight1 = Flight(date(2025, 7, 24), 'Perth', 'Sydney', '9:25', '0:35', 489, 240, 9)
+flight2 = Flight(date(2025, 9, 17), 'Sydney', 'Canberra', '8:13', '9:40', 112, 45, 4)
+flight3 = Flight(date(2025, 12, 10), 'Canberra', 'Perth', '4:37', '7:56', 420, 220, 8)
 flight1.set_flight_number()
 flight2.set_flight_number()
 flight3.set_flight_number()
@@ -872,7 +874,7 @@ def main():
 def show_agent_menu():
     """Displays the menu options for AGENTS"""
     while True:
-        print(f"Enter an option:")
+        print(f"\nEnter an option:")
         print(f"🙋‍ Customers:\n"
               f"C1. View Customers\n"
               f"C2. Filter Customers by City Address\n"
@@ -1276,7 +1278,6 @@ def show_flight_by_id():
 
 def add_flight():
     """Creates a new object of class Flight & Adds it to the flight manager list"""
-    global new_departure_time, new_arrival_time, new_price, new_points_by_flight, new_available_seats
     print(f"▸ Create a new flight")
     print(f"Enter 'cancel' to quit.")
     while True:
@@ -1358,7 +1359,7 @@ def add_flight():
                 print(f"❌ {e} Try again or type 'cancel' to quit.")
 
     # Create Flight object (new flight)
-    new_flight = Flight(new_flight_date, new_origin, new_destination, new_departure_time, new_arrival_time, new_price, new_points_by_flight, new_available_seats)
+    new_flight = Flight(new_flight_date, new_origin.title(), new_destination.title(), new_departure_time, new_arrival_time, new_price, new_points_by_flight, new_available_seats)
     new_flight.set_flight_number()
     flight_list.add_flight(new_flight)
 
@@ -1379,7 +1380,7 @@ def show_customer_menu(user):
     """Displays the menu options for CUSTOMERS"""
     current_user = user
     while True:
-        print(f"Enter an option:")
+        print(f"\nEnter an option:")
         print(f"1. View Available Flights\n"
               f"2. Book a Flight\n"
               f"3. View My Bookings\n"
@@ -1429,7 +1430,7 @@ def book_flight(current_user):
                 current_booking.add_flight(flight)
                 # Discount one seat available to the flight
                 flight.set_seats_available((flight.get_seats_available() - 1))
-                print(f"✅ You've booked flight {flight.get_flight_number()} From {flight.get_origin()} to"
+                print(f"✅ You've booked the flight {flight.get_flight_number()} from {flight.get_origin()} to"
                       f" {flight.get_destination()}\n"
                       f"Total Paid: ${flight.get_price()}\n"
                       f"Reward Points Earned: {flight.get_points_by_flight()}\n")
