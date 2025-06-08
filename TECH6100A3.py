@@ -28,6 +28,7 @@
 # 3. When flight is removed from Agent's side, no notifications or Actions are taken on Customer's side
 # 4. Reward points Qty is set by the agent when creating a new flight (not by any condition run by the system)
 # 5. Some user inputs don't have full validation.
+# 6. Although I have set __str__ & __repr__ for User, Flight & Booking, I've used __str__ in most cases instead of __repr__
 
 
 # PEP 8 Naming Conventions:
