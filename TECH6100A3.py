@@ -1299,7 +1299,6 @@ def refresh_available_flights():
         if flight.get_date_status() == 'Current' and flight.get_flight_status() == 'Confirmed':
             available_flight_manager.add_flight(flight)
 
-
 def show_available_flights():
     """Prints the list of AVAILABLE Flight objects: total number of available flights & display flight details"""
     update_flights_date_status()
@@ -1449,7 +1448,57 @@ def add_flight():
     return None
 
 def update_flight_status():
-    print("Here update flight status by id will be shown.")
+    """Updates flight_status as Confirmed, Canceled or Completed."""
+    # Keeping available flights up to date
+    update_flights_date_status()
+    refresh_available_flights()
+
+    while True:
+        print("Enter Flight ID or Cancel: ")
+        choice = input().strip()
+
+        if choice.upper() == "CANCEL":
+            print("✅ You have canceled the flight status change task.\n")
+            return
+
+        flight = None
+        for f in all_flight_manager.get_flight_list():
+            if f.get_flight_number().strip() == choice:
+                    flight = f
+                    break
+        if flight:
+            print(f"Flight Found: {flight.get_flight_number()} | {flight.get_origin()} - {flight.get_destination()} | "
+                  f"Current Status:"
+                  f" {flight.get_flight_status()}")
+            break #at this point: flight has been found and exiting from the current loop to go to the second one.
+        else:
+            print("❌ Invalid option. Please select a valid one.")
+
+    #Time to update the flight status
+    while True:
+        print(f"Select an option to update the status for flight {flight.get_flight_number()}\n"
+              f"1. Confirmed\n"
+              f"2. Canceled\n"
+              f"3. Completed\n"
+              f"0. Cancel\n")
+        user_choice = input("Select an option: ").strip()
+        if user_choice == "1":
+            flight.set_flight_status("Confirmed")
+        elif user_choice == "2":
+            flight.set_flight_status("Canceled")
+        elif user_choice == "3":
+            flight.set_flight_status("Completed")
+        elif user_choice == "0":
+            print("✅ You have canceled the flight status change task.\n")
+            return
+        else:
+            print("❌ Invalid option. Try again using from 1 to 3 to select an option, or 0 to quit.")
+            continue
+
+        print(f"✅ You've updated the status successfully.\n"
+              f"Flight: {flight.get_flight_number()} | {flight.get_origin()} - {flight.get_destination()} | "
+              f"Current Status: {flight.get_flight_status()}")
+        return
 
 def remove_flight_by_flight_number():
     """Removes a flight by its flight number from flight-list & Updates flight_status as 'Deleted' in all_flight_list"""
