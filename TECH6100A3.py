@@ -84,27 +84,15 @@ def calculate_age(dob):
     age = today.year - dob.year
     return age
 
-def check_date_past_flights(flight):
-    today = date.today()
-    if flight.get_flight_date() <= today:
-        flight.set_flight_status('Past')
-    else:
-        pass
-    return flight
-
-def check_date_status_available_flight(flight):
-    if flight.get_flight_date() >= date.today() and flight.get_flight_status() == "Confirmed":
-        available_flight_manager.add_flight(flight)
-    else:
-        pass
 
 # ------ END Functions needed on Class Definition --------- #
 # ------ START ✈️ Flight Class --------- #
 class Flight:
     def __init__(self, flight_date, origin, destination, departure_time, arrival_time, price, points_by_flight, seats_available):
         self.__flight_number = None
-        self.__flight_status = "Confirmed"
         self.__flight_date: date = flight_date
+        self.__flight_status = "Confirmed" #'Confirmed', 'Canceled' or 'Completed'
+        self.__date_status = None # 'Past' or 'Current'
         self.__origin: str = origin
         self.__destination: str = destination
         self.__departure_time: str = departure_time
@@ -118,7 +106,9 @@ class Flight:
         return (f"# --------------- #\n"
                 f"Flight Number: {self.__flight_number}\n"
                 f"Flight Status: {self.__flight_status}\n"
-                f"Date of Flight: {self.__flight_date.day}-{self.__flight_date.month}-{self.__flight_date.year}\n"
+                f"Date: "
+                f"{self.__date_status}\t {self.__flight_date.day}-{self.__flight_date.month}"
+                f"-{self.__flight_date.year}\n"
                 f"Origin: {self.__origin}\n"
                 f"Destination: {self.__destination}\n"
                 f"Departure Time: {self.__departure_time}\n"
@@ -153,6 +143,9 @@ class Flight:
 
     def get_flight_status(self):
         return self.__flight_status
+
+    def get_date_status(self):
+        return self.__date_status
 
     def get_origin(self):
         return self.__origin
@@ -191,6 +184,9 @@ class Flight:
     def set_flight_status(self, value):
         self.__flight_status = value
 
+    def set_date_status(self, value):
+        self.__date_status = value
+
     def set_origin(self, value):
         self.__origin = value
 
@@ -215,7 +211,6 @@ class Flight:
 # ------ END ✈️ Flight Class --------- #
 
 # ------ START ✈️✈️ FLIGHT MANAGER Classes --------- #
-#todo: Adjust FlightManager Class
 class FlightManager:
     def __init__(self, name):
         self.__name = name
@@ -234,19 +229,22 @@ class FlightManager:
 
     def __str__(self):
         return (f"️️✈️️️  {self.__name}   ✈️\n\t"
-                f"Total Flights: {self.__total_flights}\n")
+                f"Total Flights: {len(self.__flight_list)}\n")
 
     def display_flight_list(self):
-        for flight in self.__flight_list:
-            print(f"{flight.__str__()}")
+        if not self.__flight_list:
+            print("No flights to display.")
+        else:
+            for flight in self.__flight_list:
+                print(f"{flight}")
 
     def add_flight(self, flight: Flight):
         self.__flight_list.append(flight)
-        self.__total_flights += 1
+
 
     def remove_flight(self, flight: Flight):
         self.__flight_list.remove(flight)
-        self.__total_flights -= 1
+
 
     def get_flight_by_flight_number(self, flight_number):
         for flight in self.__flight_list:
@@ -254,6 +252,8 @@ class FlightManager:
                 return flight
         return None
 
+    def clear_flight_list(self):
+        return self.__flight_list.clear()
 
 
 
@@ -282,8 +282,9 @@ class User:
 
     #To display data from a class object to users
     def __str__(self):
-        flight_list_str = "\n".join([f"- ID: {flight.get_flight_number()}\tFrom: {flight.get_origin()}\tFrom: "
-                                     f"{flight.get_destination()}\tDate: {flight.get_flight_date()}\tAmount: $"
+        flight_list_str = "\n".join([f"- ID: {flight.get_flight_number()}\tFrom: {flight.get_origin()}\tTo: "
+                                     f"{flight.get_destination()}\tDate: {flight.get_flight_date()}\t "
+                                     f"Status: {flight.get_date_status()} - {flight.get_flight_status()}\tAmount: $"
                                      f"{flight.get_price()}\t"
                                     for flight in self.__flight_history])
         return (f"# --------------- #\n"
@@ -1281,15 +1282,39 @@ def export_customer_database():
 # --- AGENT > END Functions for Customer Management --- #
 
 # --- AGENT > START Functions for Flight Management --- #
+def update_flights_date_status():
+    """Sets each flight's date_status based on today's date"""
+    today = date.today()
+    for flight in all_flight_manager.get_flight_list():
+        if flight.get_flight_date() < today:
+            flight.set_date_status('Past')
+        else:
+            flight.set_date_status('Current')
+
+def refresh_available_flights():
+    """Updates the list of available flights based on current date & Confirmed flight_status"""
+    available_flight_manager.clear_flight_list()
+    for flight in all_flight_manager.get_flight_list():
+        if flight.get_date_status() == 'Current' and flight.get_flight_status() == 'Confirmed':
+            available_flight_manager.add_flight(flight)
+
+
 def show_available_flights():
-    """prints the list of AVAILABLE Flight objects: total number of available flights & display flight details"""
-    print(available_flight_manager)
-    available_flight_manager.display_flight_list()
+    """Prints the list of AVAILABLE Flight objects: total number of available flights & display flight details"""
+    update_flights_date_status()
+    refresh_available_flights()
+
+    print(f"Available Flights: {len(available_flight_manager.get_flight_list())}")
+    for flight in available_flight_manager.get_flight_list():
+        print(flight)
 
 def show_all_flights():
-    """prints the list of ALL Flight objects: total number of flights & display flight details"""
-    print(all_flight_manager)
-    all_flight_manager.display_flight_list()
+    """Prints the list of ALL Flight objects: total number of flights & display flight details"""
+    update_flights_date_status()
+
+    print(f"All Flights: {len(all_flight_manager.get_flight_list())}")
+    for flight in all_flight_manager.get_flight_list():
+        print(flight)
 
 
 def show_flight_by_id():
@@ -1405,13 +1430,14 @@ def add_flight():
     new_flight = Flight(new_flight_date, new_origin.title(), new_destination.title(), new_departure_time, new_arrival_time, new_price, new_points_by_flight, new_available_seats)
     new_flight.set_flight_number()
     new_flight.set_flight_status("Confirmed") # it's set by default, but just in case
-    check_date_past_flights(new_flight)
 
     #Flight added to All Flights Collection
     all_flight_manager.add_flight(new_flight)
 
-    # If Flight Date is Today and onwards -> added to Available Flights Collection
-    check_date_status_available_flight(new_flight)
+    # Update date_status based on date_status of this new flight
+    update_flights_date_status()
+    # Refresh available flight list based on this new flight added
+    refresh_available_flights()
 
     # Displays successful message
     print(f"✅ New flight {new_flight.get_flight_number()} has been created successfully.\n")
@@ -1508,6 +1534,10 @@ def book_flight(current_user):
     flight_default = flight1
     # Create a Booking object
     current_booking = Booking(user, flight_default, 'confirmed')
+
+    # Keeping available flights up to date
+    update_flights_date_status()
+    refresh_available_flights()
 
     # Ask user input to select a flight by flight number
     print("Select a flight from the list by typing its Flight Number:")
