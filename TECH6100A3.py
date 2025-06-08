@@ -1750,6 +1750,7 @@ def display_booking_list_by_id(current_user):
 
 
 def show_customer_profile(current_user):
+    """Displays all details available for a specified Customer"""
     # Keeping available flights up to date
     update_flights_date_status()
     refresh_available_flights()
@@ -1757,6 +1758,7 @@ def show_customer_profile(current_user):
     print(current_user.__str__())
 
 def remove_customer(current_user):
+    """Removes customer from customer list, marks user as Deleted in All user collection & removes the permission for login"""
     print("Are you sure you want to delete your account? Everything will be lost.\n")
     while True:
         try:
