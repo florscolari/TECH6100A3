@@ -1,29 +1,33 @@
 # TECH6100 Assessment 3 Florencia Scolari ID 1847863 June 2025
 # Check the full project and references on the GitHub Public Repo https://github.com/florscolari/TECH6100A3.git
 
-# NOTE: You'll find the unit tests below the script to run the program. Thank you.
+# NOTE: You'll find the unit tests below the script to run the program. Please follow the instructions to activate them.
+# Thank you.
 
 # User for Testing Purposes:
-#todo: update testing user
 
+# Customer
+# Email: test@t.com.au
+# Password: Abc123
 # First Name: Elle
 # Last Name: Test
-# Username: test2025
-# Email: test@t.com.au
-# Password: 123
-# Order ID: 0011122
+
+# Agent
+# Email: abc@a.com.au
+# Password: Abc123
+# First Name: Alan
+# Last Name: Doe
+
+# Reward Program Conditions applied by the system:
+# A customer is VIP when more than 1200 are earned & more than 4 flights.
+# A customer is also Silver level when they have 0-1 flights, Premium when 2-4, and Black with 5 or more flights
 
 # Out of scope:
-#todo: update out of scope section
-
-# 1. Global command to cancel an ongoing task.
+# 1. Global command to cancel an ongoing task in some cases.
 # 2. System creates Customer users by default. Agents are added by Admin role (out of scope)
 # 3. When flight is removed from Agent's side, no notifications or Actions are taken on Customer's side
-# 4. Reward points aren't assigned based on conditions (they're set by the agent user)
-
-# 2. No user input validation for: phone, email & shipping address.
-# 3. Turning back for case: If user selects she/he has an account and doesn't know username & password, no way to recover from that. Dead End.
-# 5. Although I have set __str__ & __repr__ for Book, Order & User, I've used __str__ in most cases instead of __repr__
+# 4. Reward points Qty is set by the agent when creating a new flight (not by any condition run by the system)
+# 5. Some user inputs don't have full validation.
 
 
 # PEP 8 Naming Conventions:
@@ -715,13 +719,13 @@ customer_list.add_user(customer5)
 
 #Travel Agent User
 agent_list = UserManager("Agent Collection")
-agent1 = User("AA", "Flor", "Scolari", "flor@sco.com.au", "JD12", "111111", None)
-address2 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
+agent1 = User("AA", "Alan", "Doe", "abc@a.com.au", "JD12", "111111", None)
+address0 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
 agent1.set_role(user_roles[1])
 agent1.set_birth_date(date(1989, 1, 24))
 agent1.set_password('Abc123')
 agent1.set_id_fixed('Ac618')
-agent1.set_address(address2)
+agent1.set_address(address0)
 agent_list.add_user(agent1)
 
 
@@ -1983,4 +1987,12 @@ Thank you"""
 
 # -------- END Run Unit Tests  --------- #
 
+
 ## End of the script - 1847863 F. Scolari KBS June 2025 TECH6100 Assessment 3
+
+# References
+# Cepalia A, (2024), Composition, Real Python, View on June 5 2025 <https://realpython.com/videos/composition/>
+# Dedov F., (2022), Generate Unique IDs in Python (UUIDs), NeuralNine, View on June 5 2025 <https://youtu.be/2zsxlA0OPrY?si=Kq31Bxc6_evM_LGP>
+# GeeksForGeeks, (2024), Writing CSV files in Python, GeeksForGeeks, View on June 7 2025 <https://www.geeksforgeeks.org/writing-csv-files-in-python/>
+# GenAI, (2025), Design Model, Approach & Initial Pseudocode, ChatGPT, View on June 6 2025 <https://chatgpt.com/share/684141fa-ed3c-8010-9433-c88edb174aea>
+# W3Schools, (2025), Python Random randrange() Method, W3Schools, View on June 5 2025 <https://www.w3schools.com/python/ref_random_randrange.asp>
