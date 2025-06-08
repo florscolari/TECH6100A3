@@ -86,8 +86,9 @@ def calculate_age(dob):
 # ------ END Functions needed on Class Definition --------- #
 # ------ START ✈️ Flight Class --------- #
 class Flight:
-    def __init__(self, origin, destination, departure_time, arrival_time, price, points_by_flight, seats_available):
+    def __init__(self, flight_date, origin, destination, departure_time, arrival_time, price, points_by_flight, seats_available):
         self.__flight_number = None
+        self.__flight_date: date = flight_date
         self.__origin: str = origin
         self.__destination: str = destination
         self.__departure_time: str = departure_time
@@ -100,6 +101,7 @@ class Flight:
     def __str__(self):
         return (f"# --------------- #\n"
                 f"Flight Number: {self.__flight_number}\n"
+                f"Date of Flight: {self.__flight_date.day}-{self.__flight_date.month}-{self.__flight_date.year}\n"
                 f"Origin: {self.__origin}\n"
                 f"Destination: {self.__destination}\n"
                 f"Departure Time: {self.__departure_time}\n"
@@ -114,6 +116,7 @@ class Flight:
     def __repr__(self):
         return (f"------\n"
                 f"Flight Number: {self.__flight_number} : {type(self.__flight_number)}\n"
+                f"Date of Flight: {self.__flight_date.day}-{self.__flight_date.month}-{self.__flight_date.year}\n"
                 f"Origin: {self.__origin} : {type(self.__origin)}\n"
                 f"Destination: {self.__destination} : {type(self.__destination)}\n"
                 f"Departure Time: {self.__departure_time} : {type(self.__departure_time)}\n"
@@ -126,6 +129,9 @@ class Flight:
     #Getters
     def get_flight_number(self):
         return self.__flight_number
+
+    def get_flight_date(self):
+        return self.__flight_date
 
     def get_origin(self):
         return self.__origin
@@ -157,6 +163,9 @@ class Flight:
     def set_flight_number_fixed(self, value):
         """Hardcodes a fixed IDs for flight numbers... Only for populated data purposes"""
         self.__flight_number = value
+
+    def set_flight_date(self, value):
+        self.__flight_date = value
 
     def set_origin(self, value):
         self.__origin = value
@@ -241,7 +250,7 @@ class User:
     #To display data from a class object to users
     def __str__(self):
         flight_list_str = "\n".join([f"- ID: {flight.get_flight_number()}\tFrom: {flight.get_origin()}\tFrom: "
-                                     f"{flight.get_destination()}\tAmount: $"
+                                     f"{flight.get_destination()}\tDate: {flight.get_flight_date()}\tAmount: $"
                                      f"{flight.get_price()}\t"
                                     for flight in self.__flight_history])
         return (f"# --------------- #\n"
@@ -280,7 +289,7 @@ class User:
 
     def display_flight_history(self):
         flight_list_str = "\n".join([f"- ID: {flight.get_flight_number()}\tFrom: {flight.get_origin()}\tTo: "
-                                     f"{flight.get_destination()}\tAmount: $"
+                                     f"{flight.get_destination()}\tDate: {flight.get_flight_date()}\tAmount: $"
                                      f"{flight.get_price()}\t"
                                      for flight in self.__flight_history])
         print(f"Booking List: {len(self.__flight_history)} flights\n"
@@ -510,6 +519,7 @@ class Booking:
                 f"Paid: ${self.__price_paid}\n"
                 f"▸ Flight Details\n"
                 f"Flight Number: {self.__flight.get_flight_number()}\n"
+                f"Date of Flight: {self.__flight.get_flight_date()}\n"
                 f"Origin: {self.__flight.get_origin()}\t"
                 f"Destination: {self.__flight.get_destination()}\n"
                 f"Departure Time: {self.__flight.get_departure_time()}\t"
@@ -526,6 +536,7 @@ class Booking:
                 f"Paid: ${self.__price_paid}\n"
                 f"▸ Flight Details\n"
                 f"Flight Number: {self.__flight.get_flight_number()}\n"
+                f"Date of Flight: {self.__flight.get_flight_date()}\n"
                 f"Origin: {self.__flight.get_origin()}\t"
                 f"Destination: {self.__flight.get_destination()}\n"
                 f"Departure Time: {self.__flight.get_departure_time()}\t"
@@ -1344,71 +1355,12 @@ def add_flight():
             except ValueError as e:
                 print(f"❌ {e} Try again or type 'cancel' to quit.")
 
-    new_flight = Flight('Perth', 'Sydney', '9:25', '0:35', 489, 240, 9)
+    # Create Flight object (new flight)
+    new_flight = Flight()
     flight_list.add_flight(new_flight)
 
 
 
-        while True:
-            new_password = input('Enter password: \n').strip()
-            if new_password.lower() == 'cancel':
-                print("Account creation canceled.")
-                return None
-
-            if not new_password:
-                print(f"❌ Password is required. It cannot be empty.")
-            else:
-                break  # at this point, password is OK.
-
-        print("Complete customer's profile.\n")
-        print("▸ Personal Details")
-        # First name
-        new_first_name = input('First name: \n').strip()
-        if new_first_name.lower() == 'cancel':
-            print("Account creation canceled.")
-            return None
-
-        # Last name
-        new_last_name = input('Last name: \n')
-        if new_last_name.lower() == 'cancel':
-            print("Account creation canceled.")
-            return None
-
-
-
-        # Phone Number
-        try:
-            new_phone_number = int(input("Phone number: \n").strip())
-        except ValueError:
-            print("❌ Invalid phone number. Account creation canceled")
-            return None
-
-        # Address
-        print("▸ Address Details")
-        street = input("Street address: \n").strip()
-        if street.lower() == 'cancel':
-            print("Account creation canceled.")
-            return None
-
-        city = input("City: \n").strip()
-        if city.lower() == 'cancel':
-            print("Account creation canceled.")
-            return None
-
-        state = input("State: \n").strip()
-        if state.lower() == 'cancel':
-            print("Account creation canceled.")
-            return None
-
-        zip_code = input("Zip Code: \n").strip()
-        if zip_code.lower() == 'cancel':
-            print("Account creation canceled.")
-            return None
-
-        country = input("Country: \n").strip()
-        if country.lower() == 'cancel':
-            print("Account creation canceled.")
-            return None
 
         # Create User object (new customer)
         new_address = Address(street, city, state, zip_code, country)
