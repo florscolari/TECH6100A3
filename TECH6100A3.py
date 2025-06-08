@@ -479,7 +479,7 @@ class Address:
 # ------ END 🙋‍♀️️ USER Class --------- #
 
 # ------ START 🙋‍♀️🙋 USER MANAGER Class --------- #
-#todo: Adjust UserManager Class
+
 class UserManager:
     def __init__(self, name):
         self.__name = name
@@ -628,7 +628,7 @@ class Booking:
 # ------ END 📗 Booking Class --------- #
 
 # ------ START 📗📗️ BOOKING MANAGER Class --------- #
-#todo: Adjust BookingManager Class
+
 class BookingManager:
     def __init__(self, name):
         self.__name = name
@@ -1288,6 +1288,7 @@ def update_flights_date_status():
     for flight in all_flight_manager.get_flight_list():
         if flight.get_flight_date() < today:
             flight.set_date_status('Past')
+            flight.set_seats_available(0)
         else:
             flight.set_date_status('Current')
 
