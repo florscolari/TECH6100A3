@@ -943,7 +943,7 @@ def show_agent_menu():
         elif user_choice == "C2":
             filter_customers_by_city()
         elif user_choice == "C3":
-            filter_customers_by_age_range()
+            ask_min_and_max_range()
         elif user_choice == "C4":
             show_customer_by_id() # Done
         elif user_choice == "C5":
@@ -959,7 +959,7 @@ def show_agent_menu():
         elif user_choice == "F3":
             add_flight() # Done
         elif user_choice == "F4":
-            update_flight_status()
+            update_flight_status() # Done
         elif user_choice == "F5":
             remove_flight_by_flight_number() # Done
         elif user_choice == "F6":
@@ -980,8 +980,34 @@ def show_all_customers():
 def filter_customers_by_city():
     print("Here customers filtered by City will be shown.")
 
-def filter_customers_by_age_range():
-    print("Here customers filtered by age will be shown.")
+def filter_customers_by_age_range(min_age, max_age):
+    """Retrieves a list of customers within a specific age range."""
+    matching_customers = []
+
+    for customer in customer_list.get_user_list():
+        age = customer.get_age()
+        if min_age <= age <= max_age:
+            matching_customers.append(customer)
+
+    # to display the list of customers within the age range
+    print(f"{len(matching_customers)} Customers aged between {min_age} and {max_age}:")
+    if matching_customers:
+        for i, customer in enumerate(matching_customers, start=1):
+            print(f"{i}. {customer.get_first_name()} {customer.get_last_name()} {customer.get_age()}")
+    else:
+        print("No customers found in this age range.")
+
+def ask_min_and_max_range():
+    try:
+        min_age = int(input("Enter Minimum age."))
+        max_age = int(input("Enter Maximum age."))
+        if min_age > max_age:
+            print("❌ Minimum age cannot be greater than maximum age.")
+            return
+        filter_customers_by_age_range(min_age, max_age)
+    except ValueError:
+        print("❌ Invalid option. Please enter valid number for age.")
+
 
 def show_customer_by_id():
     """Checks a customer by its ID & retrieves the customer details"""
