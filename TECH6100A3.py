@@ -84,6 +84,19 @@ def calculate_age(dob):
     age = today.year - dob.year
     return age
 
+def check_date_past_flights(flight):
+    today = date.today()
+    if flight.get_flight_date() <= today:
+        flight.set_flight_status('Past')
+    else:
+        pass
+    return flight
+
+def check_date_status_available_flight(flight):
+    if flight.get_flight_date() >= date.today() and flight.get_flight_status() == "Confirmed":
+        available_flight_manager.add_flight(flight)
+    else:
+        pass
 
 # ------ END Functions needed on Class Definition --------- #
 # ------ START ✈️ Flight Class --------- #
@@ -1392,13 +1405,13 @@ def add_flight():
     new_flight = Flight(new_flight_date, new_origin.title(), new_destination.title(), new_departure_time, new_arrival_time, new_price, new_points_by_flight, new_available_seats)
     new_flight.set_flight_number()
     new_flight.set_flight_status("Confirmed") # it's set by default, but just in case
+    check_date_past_flights(new_flight)
 
     #Flight added to All Flights Collection
     all_flight_manager.add_flight(new_flight)
 
     # If Flight Date is Today and onwards -> added to Available Flights Collection
-    if new_flight.get_flight_date() >= date.today() and new_flight.get_flight_status() == "Confirmed":
-        available_flight_manager.add_flight(new_flight)
+    check_date_status_available_flight(new_flight)
 
     # Displays successful message
     print(f"✅ New flight {new_flight.get_flight_number()} has been created successfully.\n")
