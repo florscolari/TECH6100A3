@@ -941,7 +941,7 @@ def show_agent_menu():
         if user_choice == "C1":
             show_all_customers() # Done
         elif user_choice == "C2":
-            filter_customers_by_city()
+            ask_city() # Done
         elif user_choice == "C3":
             ask_min_and_max_range()
         elif user_choice == "C4":
@@ -977,8 +977,38 @@ def show_all_customers():
     print(customer_list)
     customer_list.display_user_list()
 
-def filter_customers_by_city():
-    print("Here customers filtered by City will be shown.")
+def filter_customers_by_city(city):
+    """Retrieves a list of customers that match with a specific city given."""
+    matching_customers = []
+
+    for customer in customer_list.get_user_list():
+        if customer.get_city().lower() == city.lower():
+            matching_customers.append(customer)
+
+    # to display the list of customers within the age range
+    print(f"{len(matching_customers)} Customers live in {city.title()}:")
+    if matching_customers:
+        for i, customer in enumerate(matching_customers, start=1):
+            print(f"{i}. {customer.get_first_name()} {customer.get_last_name()}")
+    else:
+        print("No customers found for this city.")
+
+def ask_city():
+    """Asks the user the city to do the filtering by city on customer_list"""
+    while True:
+        city = input("Enter city or cancel to quit: ").strip()
+
+        if city.upper() == "CANCEL":
+            print("✅ Filter by city task has been canceled.")
+            return
+
+        if not city:
+            print("❌ City is required. It cannot be empty.")
+            continue
+
+        # Calling the other function to pass the user input for city as argument
+        filter_customers_by_city(city)
+        return
 
 def filter_customers_by_age_range(min_age, max_age):
     """Retrieves a list of customers within a specific age range."""
@@ -998,9 +1028,10 @@ def filter_customers_by_age_range(min_age, max_age):
         print("No customers found in this age range.")
 
 def ask_min_and_max_range():
+    """Asks the user the min_age and max_age to do the filtering by age range on customer_list"""
     try:
-        min_age = int(input("Enter Minimum age."))
-        max_age = int(input("Enter Maximum age."))
+        min_age = int(input("Enter Minimum age: "))
+        max_age = int(input("Enter Maximum age: "))
         if min_age > max_age:
             print("❌ Minimum age cannot be greater than maximum age.")
             return
@@ -1618,18 +1649,18 @@ def show_customer_menu(user):
               f"0. Logout\n")
         user_choice = input("Select an option: ").strip()
         if user_choice == "1":
-            show_available_flights()
+            show_available_flights() # Done
         elif user_choice == "2":
-            book_flight(current_user)
+            book_flight(current_user) # Done
         elif user_choice == "3":
-            display_booking_list_by_id(current_user)
+            display_booking_list_by_id(current_user) # Done
         elif user_choice == "4":
             show_customer_profile(current_user)
         elif user_choice == "5":
             remove_customer(current_user)
         elif user_choice == "0":
             print("✅ You have successfully logout.\n")
-            welcome()
+            welcome() # Done
             break
         else:
             print("❌ Invalid option. Try again using from 1 to 5 to select an option, or 0 to logout.")
@@ -1749,7 +1780,6 @@ def remove_customer(current_user):
                 print(f"❌ {e} Try again or type 'cancel' to quit.")
 
 # --- CUSTOMER > END Functions --- #
-
 
 
 def create_user_account():
