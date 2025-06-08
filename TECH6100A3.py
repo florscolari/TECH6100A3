@@ -220,6 +220,7 @@ class FlightManager:
 # ------ START 🙋‍♀️️ User Class --------- #
 class User:
     def __init__(self, id, first_name, last_name, email, password, phone_number, birth_date):
+        self.__user_status = 'Active' # Active or Deleted when delete customer
         self.__id : str = id
         self.__first_name : str = first_name
         self.__last_name : str = last_name
@@ -320,6 +321,9 @@ class User:
     def get_city(self):
         return self.__address.get_city()
 
+    def get_user_status(self):
+        return self.__user_status
+
     def get_vip_status(self):
         return self.__vip
 
@@ -374,6 +378,10 @@ class User:
             self.__vip = '🏆 Yes'
         else:
             self.__vip = 'No'
+
+    def update_user_status(self):
+        """Sets User Status as Deleted if Customer account has been deleted"""
+        self.__user_status = 'Deleted'
 
     def update_tag_level(self):
         """Updates Reward Program Level based on points earned with flights/bookings"""
@@ -779,7 +787,7 @@ def login():
             # Checks if email exists
             user = None
             for u in all_user_list.get_user_list():
-                if u.get_email().lower() == user_email.lower():
+                if u.get_email().lower() == user_email.lower() and u.get_user_status() == 'Active':
                     user = u
                     break
 
@@ -1051,7 +1059,7 @@ def add_customer():
 
 
 def remove_customer_by_id():
-    """Removes customer user by its ID for all-user list & customer-list"""
+    """Removes customer user by its ID from customer-list & Updates user_status as 'Deleted' in all_user_list"""
     user_selected = None
     while True:
         print("Enter Customer ID or Cancel: ")
@@ -1089,21 +1097,20 @@ def remove_customer_by_id():
             # Inputs 'delete'
             if choice.lower() == 'delete':
                 customer_list.remove_user(user_selected)
-                all_user_list.remove_user(user_selected)
-                print(f"✅ You've deleted account {user_selected.get_id()} successfully.")
-                return show_agent_menu()
+                user_selected.update_user_status()
+                print(f"✅ You've deleted account {user_selected.get_id()} successfully.\n")
+                return None
 
         except ValueError as e:
             print(f"❌ {e} Try again or type 'cancel' to quit.")
 
 
-
-def export_customer_database():
-    print(f"You are just about exporting the customer database")
+def export_active_customers_db():
+    """Exports CSV file with Active Customers"""
     while True:
         try:
             file_name_raw = input("Enter a name for the csv file or 'cancel' to quit. \n").strip()
-            file_name = file_name_raw.replace(" ", "") #to clean the name of the file
+            file_name = file_name_raw.replace(" ", "")  # to clean the name of the file
             # Inputs 'cancel'
             if file_name.lower() == 'cancel':
                 print("Exporting CSV file canceled.\n")
@@ -1117,7 +1124,7 @@ def export_customer_database():
         except ValueError as e:
             print(f"❌ {e} Try again or type 'cancel' to quit.")
 
-    # Gets the list of All User objects
+    # Gets the list of Active Customer User objects
     data = customer_list.get_user_list()
 
     # Formats dataset as dictionary, so it can be export as csv or json in the future. Also easier to scale down or up
@@ -1146,7 +1153,83 @@ def export_customer_database():
         writer.writeheader()
         writer.writerows(dict_data)
     print(f"✅ {file_name}.csv has been created successfully.\n")
-    return show_agent_menu()
+    return None
+
+def export_all_customers_db():
+    """Exports CSV file with All Users (Active & Deleted Customers + Agents)"""
+    while True:
+        try:
+            file_name_raw = input("Enter a name for the csv file or 'cancel' to quit. \n").strip()
+            file_name = file_name_raw.replace(" ", "")  # to clean the name of the file
+            # Inputs 'cancel'
+            if file_name.lower() == 'cancel':
+                print("Exporting CSV file canceled.\n")
+                return None
+
+            # Input is empty
+            if not file_name:
+                print("❌ Input is required. Try again.")
+                continue
+            break
+        except ValueError as e:
+            print(f"❌ {e} Try again or type 'cancel' to quit.")
+
+    # Gets the list of All User objects
+    data = all_user_list.get_user_list()
+
+    # Formats dataset as dictionary, so it can be export as csv or json in the future. Also easier to scale down or up
+    # attributes
+    dict_data = [{
+        'ID': user.get_id(),
+        'First Name': user.get_first_name(),
+        'Last Name': user.get_last_name(),
+        'Email': user.get_email(),
+        'Phone Number': user.get_email(),
+        'Role': user.get_role(),
+        'User Status': user.get_user_status(),
+        'Birth Date': user.get_dob(),
+        'Age': user.get_age(),
+        'Address': user.get_address(),
+        'City': user.get_city(),
+        'Reward Points': user.get_points(),
+        'Reward Level': user.get_tag_level(),
+        'VIP': user.get_vip_status(),
+        'Total Spent': user.get_total_spent(),
+        'Total Flights': len(user.get_flight_history()),
+        'Total Bookings': len(user.get_booking_list())
+    } for user in data]
+
+    with open(f'./{file_name}.csv', 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=dict_data[0].keys())
+        writer.writeheader()
+        writer.writerows(dict_data)
+    print(f"✅ {file_name}.csv has been created successfully.\n")
+    return None
+
+def export_customer_database():
+    """Asks which database from the available ones an Agent wants to export from"""
+    while True:
+        try:
+            print(f"Available databases to export:\n"
+                  f"1. Active Customers\n"
+                  f"2. All Users (includes deleted Customer accounts & Agent users)\n")
+            user_choice = input("Select an option or type 'cancel' to quit: ").strip()
+            if user_choice == "1":
+                export_active_customers_db()
+            elif user_choice == "2":
+                export_all_customers_db()
+            # Input is cancel
+            elif user_choice.lower() == 'cancel':
+                print("Exporting CSV file canceled.\n")
+                return None
+            # Input is empty
+            if not user_choice:
+                print("❌ Input is required. Try again.")
+                continue
+            break
+        except ValueError as e:
+            print(f"❌ {e} Try again or type 'cancel' to quit.")
+
 
 # --- AGENT > END Functions for Customer Management --- #
 
