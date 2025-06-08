@@ -323,6 +323,9 @@ class User:
     def get_vip_status(self):
         return self.__vip
 
+    def get_tag_level(self):
+        return self.__tag
+
     def get_points(self):
         return self.__total_points
 
@@ -609,11 +612,9 @@ class BookingManager:
 # ------ END 📗📗️ BOOKING MANAGER Class --------- #
 
 
-#🙋 2 Customers added to have data to handle when the program starts
+#🙋 4 Customers added to have data to handle when the program starts
 
 customer_list = UserManager("Customer Database") #Customer Collection
-agent_list = UserManager("Agent Collection")
-
 customer1 = User("CC", "Elle", "Doe", "test@t.com.au", "ElleD", "00000000000", None)
 address1 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
 customer1.set_role(user_roles[0])
@@ -632,6 +633,35 @@ customer2.set_id_fixed('Cc618')
 customer2.set_address(address2)
 customer_list.add_user(customer2)
 
+customer3 = User("CC", "Diana", "Spencer", "dspencer@example.com.au", "AAAA", "9999999999", None)
+address3 = Address("5 Wilkinson Street", "Sydney", "NSW", "2011", "Australia")
+customer3.set_role(user_roles[0])
+customer3.set_password('Abc123')
+customer3.set_birth_date(date(2003, 6, 21))
+customer3.set_id_fixed('Cc621')
+customer3.set_address(address3)
+customer_list.add_user(customer3)
+
+customer4 = User("CC", "Rob", "Dylan", "rdylan@example.com.au", "AAAA", "6666666666", None)
+address4 = Address("15 Monroe Street", "Sydney", "NSW", "2009", "Australia")
+customer4.set_role(user_roles[0])
+customer4.set_password('Abc123')
+customer4.set_birth_date(date(2001, 4, 18))
+customer4.set_id_fixed('Cc622')
+customer4.set_address(address4)
+customer_list.add_user(customer4)
+
+customer5 = User("CC", "Susan", "Deputy", "sdeputy@example.com.au", "AAAA", "5555555555", None)
+address5 = Address("24 Frederick Street", "Canberra", "ACT", "2009", "Australia")
+customer5.set_role(user_roles[0])
+customer5.set_password('Abc123')
+customer5.set_birth_date(date(1976, 2, 9))
+customer5.set_id_fixed('Cc623')
+customer5.set_address(address5)
+customer_list.add_user(customer5)
+
+#Travel Agent User
+agent_list = UserManager("Agent Collection")
 agent1 = User("AA", "Flor", "Scolari", "flor@sco.com.au", "JD12", "111111", None)
 address2 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
 agent1.set_role(user_roles[1])
@@ -642,10 +672,12 @@ agent1.set_address(address2)
 agent_list.add_user(agent1)
 
 
-
 all_user_list = UserManager("All Users") # to login validation purposes
 all_user_list.add_user(customer1)
 all_user_list.add_user(customer2)
+all_user_list.add_user(customer3)
+all_user_list.add_user(customer4)
+all_user_list.add_user(customer5)
 all_user_list.add_user(agent1)
 
 #✈️ 3 Flights added
@@ -692,11 +724,17 @@ booking2.set_flight_seat()
 booking3.set_flight_seat()
 booking4.set_flight_seat()
 
-# Adds bookings to User's booking list (flight history) x 2 customers
+# Adds bookings to User's flight history x 2 customers
 customer1.add_flight_to_flight_history(flight1)
 customer1.add_flight_to_flight_history(flight2)
 customer2.add_flight_to_flight_history(flight2)
 customer2.add_flight_to_flight_history(flight3)
+
+# Adds bookings to User's booking list x 2 customers
+customer1.add_booking_to_booking_list(flight1)
+customer1.add_booking_to_booking_list(flight2)
+customer2.add_booking_to_booking_list(flight2)
+customer2.add_booking_to_booking_list(flight3)
 
 # Sums reward points to this user
 #Customer1
@@ -1085,15 +1123,29 @@ def export_customer_database():
     # Formats dataset as dictionary, so it can be export as csv or json in the future. Also easier to scale down or up
     # attributes
     dict_data = [{
-        'ID': user.get_id()
+        'ID': user.get_id(),
+        'First Name': user.get_first_name(),
+        'Last Name': user.get_last_name(),
+        'Email': user.get_email(),
+        'Phone Number': user.get_email(),
+        'Role': user.get_role(),
+        'Birth Date': user.get_dob(),
+        'Age': user.get_age(),
+        'Address': user.get_address(),
+        'City': user.get_city(),
+        'Reward Points': user.get_points(),
+        'Reward Level': user.get_tag_level(),
+        'VIP': user.get_vip_status(),
+        'Total Spent': user.get_total_spent(),
+        'Total Flights': len(user.get_flight_history()),
+        'Total Bookings': len(user.get_booking_list())
     } for user in data]
-    # todo: how to not print passwords? should I replace them with '**'? when csv creation?
 
     with open(f'./{file_name}.csv', 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=dict_data[0].keys())
         writer.writeheader()
         writer.writerows(dict_data)
-    print(f"✅ {file_name}.csv has been created successfully.")
+    print(f"✅ {file_name}.csv has been created successfully.\n")
     return show_agent_menu()
 
 # --- AGENT > END Functions for Customer Management --- #
