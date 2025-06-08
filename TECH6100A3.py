@@ -1276,8 +1276,7 @@ def show_flight_by_id():
 
 def add_flight():
     """Creates a new object of class Flight & Adds it to the flight manager list"""
-
-    #todo: add date to a flight
+    global new_departure_time, new_arrival_time, new_price, new_points_by_flight, new_available_seats
     print(f"▸ Create a new flight")
     print(f"Enter 'cancel' to quit.")
     while True:
@@ -1288,7 +1287,7 @@ def add_flight():
                     new_day = int(input("Day (1-31): \n").strip())
                     new_month = int(input("Month (1-12): \n").strip())
                     new_year = int(input("Year (e.g. 2025): \n").strip())
-                    flight_date = date(new_year, new_month, new_day)
+                    new_flight_date = date(new_year, new_month, new_day)
                 except ValueError:
                     print("❌ Invalid date. Flight creation canceled")
                     return None
@@ -1352,33 +1351,21 @@ def add_flight():
                     print("❌ Invalid Seat value. Flight creation canceled")
                     return None
 
+                #All inputs OK, exit the loop to create the new flight
+                break
+
             except ValueError as e:
                 print(f"❌ {e} Try again or type 'cancel' to quit.")
 
     # Create Flight object (new flight)
-    new_flight = Flight()
+    new_flight = Flight(new_flight_date, new_origin, new_destination, new_departure_time, new_arrival_time, new_price, new_points_by_flight, new_available_seats)
+    new_flight.set_flight_number()
     flight_list.add_flight(new_flight)
 
-
-
-
-        # Create User object (new customer)
-        new_address = Address(street, city, state, zip_code, country)
-        new_user = User(None, new_first_name, new_last_name, new_email, new_password, new_phone_number, birth_date)
-        new_user.set_role('customer')
-        new_user.set_password(new_password)
-        new_user.set_birth_date(birth_date)
-        new_user.set_id()
-        new_user.set_address(new_address)
-
-        # Adds User object (new customer) to the customer list
-        customer_list.add_user(new_user)
-        all_user_list.add_user(new_user)
-
-        # Displays successful message
-        print("✅ New customer account has been created successfully.\n")
-        print("-" * 20)
-        return new_user
+    # Displays successful message
+    print(f"✅ New flight {new_flight.get_flight_number()} has been created successfully.\n")
+    print("-" * 20)
+    return None
 
 def update_flight_status():
     print("Here update flight status by id will be shown.")
@@ -1589,14 +1576,14 @@ def create_user_account():
         new_month = int(input("Enter birth month (1-12): \n").strip())
         new_year = int(input("Enter birth year (e.g. 1980): \n").strip())
         birth_date = date(new_year, new_month, new_day)
-    except Exception:
+    except ValueError:
         print("❌ Invalid date. Account creation canceled")
         return None
 
     # Phone Number
     try:
         new_phone_number = int(input("Enter phone number: \n").strip())
-    except Exception:
+    except ValueError:
         print("❌ Invalid phone number. Account creation canceled")
         return None
 
