@@ -1461,7 +1461,7 @@ def add_flight():
     return None
 
 def update_flight_status():
-    """Updates flight_status as Confirmed, Canceled or Completed."""
+    """Updates flight_status as Confirmed, Canceled or Completed. Once in Completed, cannot be changed."""
     # Keeping available flights up to date
     update_flights_date_status()
     refresh_available_flights()
@@ -1487,30 +1487,48 @@ def update_flight_status():
         else:
             print("❌ Invalid option. Please select a valid one.")
 
+
+    current_status = flight.get_flight_status()
     #Time to update the flight status
     while True:
-        print(f"Select an option to update the status for flight {flight.get_flight_number()}\n"
+        print(f"Select an option to update the status for flight {flight.get_flight_number()} | Current status: {current_status}\n"
               f"1. Confirmed\n"
               f"2. Canceled\n"
               f"3. Completed\n"
               f"0. Cancel\n")
         user_choice = input("Select an option: ").strip()
-        if user_choice == "1":
-            flight.set_flight_status("Confirmed")
-        elif user_choice == "2":
-            flight.set_flight_status("Canceled")
-        elif user_choice == "3":
-            flight.set_flight_status("Completed")
-        elif user_choice == "0":
+
+        if user_choice == "0":
             print("✅ You have canceled the flight status change task.\n")
             return
+        elif user_choice == "1":
+            new_status = "Confirmed"
+        elif user_choice == "2":
+            new_status = "Canceled"
+        elif user_choice == "3":
+            if current_status == "Completed":
+                print("⚠️ Completed flights cannot be updated.")
+                continue
+            new_status = "Completed"
         else:
             print("❌ Invalid option. Try again using from 1 to 3 to select an option, or 0 to quit.")
             continue
 
+        # time to set the new status
+        flight.set_flight_status(new_status)
+
+        # Update bookings associated to this flight
+        affected_bookings = 0
+        for booking in booking_list.get_booking_list():
+            if booking.get_flight_number() == flight.get_flight_number():
+                # Booking status will change only is new status is different from current one
+                if booking.get_status() != new_status:
+                    booking.set_status(new_status)
+                    affected_bookings += 1
+
         print(f"✅ You've updated the status successfully.\n"
-              f"Flight: {flight.get_flight_number()} | {flight.get_origin()} - {flight.get_destination()} | "
-              f"Current Status: {flight.get_flight_status()}")
+              f"Flight {flight.get_flight_number()} status updated successfully to {flight.get_flight_status()}")
+        print(f"{affected_bookings} bookings have been updated to match this flight status.")
         return
 
 def remove_flight_by_flight_number():
@@ -1599,7 +1617,7 @@ def book_flight(current_user):
     user = current_user
     flight_default = flight1
     # Create a Booking object
-    current_booking = Booking(user, flight_default, 'confirmed')
+    current_booking = Booking(user, flight_default, 'Confirmed')
 
     # Keeping available flights up to date
     update_flights_date_status()
