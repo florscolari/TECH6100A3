@@ -1319,6 +1319,9 @@ def show_all_flights():
 
 def show_flight_by_id():
     """Checks a flight by its ID & retrieves the flight details"""
+    # Keeping available flights up to date
+    update_flights_date_status()
+    refresh_available_flights()
     while True:
         print("Enter Flight ID or Cancel: ")
         choice = input().strip()
@@ -1609,6 +1612,10 @@ def display_booking_list_by_id(current_user):
 
 
 def show_customer_profile(current_user):
+    # Keeping available flights up to date
+    update_flights_date_status()
+    refresh_available_flights()
+
     print(current_user.__str__())
 
 def remove_customer(current_user):
