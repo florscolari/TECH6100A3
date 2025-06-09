@@ -12,22 +12,22 @@ Build main menu and role-based menus:
 ✅ Start with basic printout menus and input handlers, no features yet.
 
 Implement simple features first:
-For example, list all flights for customers, list all customers for agents.
+✅ For example, list all flights for customers, list all customers for agents.
 
 Implement Unit Tests:
 ✅ implement at least 2 of these unit test cases
 
 Add CRUD operations gradually:
-Add booking, create flight, add/remove customers, filtering, etc.
+✅ Add booking, create flight, add/remove customers, filtering, etc.
 
 Add advanced features:
-Loyalty points, automated tags, export to CSV.
+✅ Loyalty points, automated tags, export to CSV.
 
 Documentation
-Update reference list & mention it to check it on GitHub
+✅ Update reference list & mention it to check it on GitHub
 
 Unit Test error
-Review if it is possible to fix that to avoid having error warnings
+✅ Review if it is possible to fix that to avoid having error warnings
 
 Test extensively after each new feature
-This way you can catch errors early.
+✅ This way you can catch errors early.
