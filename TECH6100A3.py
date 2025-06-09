@@ -9,7 +9,7 @@
 # User for Testing Purposes:
 
 # Customer
-# Email: test@t.com.au
+# Email: test@a.com.au
 # Password: Abc123
 # First Name: Elle
 # Last Name: Test
@@ -24,13 +24,24 @@
 # A customer is VIP when more than 1200 are earned & more than 4 flights.
 # A customer is also Silver level when they have 0-1 flights, Premium when 2-4, and Black with 5 or more flights
 
+# In scope:
+# User management: Create new customer account, Delete customer account, ID creation, Read customer details (my profile),
+#   store deleted accounts for travel agent purposes, login for 2 roles (customer & agent), filter & show users
+#   by  age range, by id, by city they live in
+# Flight management: Create & Delete flights, change status, Show available flights & show all flights, flight number creation
+# Bookings: Create bookings, Show all bookings, show bookings by user_id, update status linked to flight status
+# Program Rewards & VIP labels: tagging-user labels done by the program based on conditions above
+# Reporting: Export Current Customer db and Export All Customer db, both in csv file.
+
 # Out of scope:
 # 1. Global command to cancel an ongoing task in some cases.
 # 2. System creates Customer users by default. Agents are added by Admin role (out of scope)
 # 3. When flight is removed from Agent's side, no notifications or Actions are taken on Customer's side
-# 4. Reward points Qty is set by the agent when creating a new flight (not by any condition run by the system)
-# 5. Some user inputs don't have full validation.
-# 6. Although I have set __str__ & __repr__ for User, Flight & Booking, I've used __str__ in most cases instead of __repr__
+# 4. My bookings displays all bookings even they are Past date and Canceled. (No condition for no display past bookings has been set)
+# 5. Reward points Qty is set by the agent when creating a new flight (not by any condition run by the system)
+# 6. Some user inputs don't have full validation.
+# 7. Although I have set __str__ & __repr__ for User, Flight & Booking, I've used __str__ in most cases instead of __repr__
+# 8. No UD Operations for bookings from Customer side. Only Create & Read. Agent updates flight states and impacts on booking status.
 
 
 # PEP 8 Naming Conventions:
@@ -304,7 +315,7 @@ class User:
                 f"▸Contact Details:\n"
                 f"Email: {self.__email}\n"
                 f"Phone Number: {self.__phone_number}\n"
-                f"Address: {self.__address}\n"                
+                f"Address: {self.__address}\n\n"                
                 f"▸Transaction Details:\n"
                 f"Total Flights: {len(self.__flight_history)}\n"
                 f"Total Spent: ${self.__total_spent}\n\n"
@@ -675,7 +686,7 @@ class BookingManager:
 #🙋 4 Customers added to have data to handle when the program starts
 
 customer_list = UserManager("Customer Database") #Customer Collection
-customer1 = User("CC", "Elle", "Doe", "test@t.com.au", "ElleD", "00000000000", None)
+customer1 = User("CC", "Elle", "Doe", "test@a.com.au", "ElleD", "00000000000", None)
 address1 = Address("000 William Street", "Perth", "WA", "6000", "Australia")
 customer1.set_role(user_roles[0])
 customer1.set_password('Abc123')
@@ -878,7 +889,7 @@ def login():
 
             print("✅ Login successful.\n")
             print("-"*20)
-            print(f"Welcome {user.get_first_name()}!")
+            print(f"Welcome {user.get_first_name().title()}!")
             return user
 
         except ValueError as e:
@@ -1555,7 +1566,7 @@ def update_flight_status():
     current_status = flight.get_flight_status()
     #Time to update the flight status
     while True:
-        print(f"Select an option to update the status for flight {flight.get_flight_number()} | Current status: {current_status}\n"
+        print(f"Select an option to update the status:\n"
               f"1. Confirmed\n"
               f"2. Canceled\n"
               f"3. Completed\n"
