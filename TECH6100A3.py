@@ -1,9 +1,8 @@
 # TECH6100 Assessment 3 Florencia Scolari ID 1847863 June 2025
 # Check the full project and references on the GitHub Public Repo https://github.com/florscolari/TECH6100A3.git
 
-# NOTE: You'll find the unit tests below the script to run the program. Please follow the instructions to activate them.
-# Having Unit tests and script in the same file has been a bit of an issue to run them properly. If you can't make it
-# following the instructions above, please download Program.py & UnitTests.py from the Repo.
+# NOTE: You'll find the unit tests below the script to run the program.
+# Please follow the instructions to activate them.
 # Thank you.
 
 # User for Testing Purposes:
