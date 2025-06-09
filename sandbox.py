@@ -66,3 +66,9 @@ def hash_password(password):
     """Handles passwords with hash technique instead of storing it as plain text"""
     return hashlib.sha256(password.encode()).hexdigest()
 
+
+
+#1 Clean user list & add testing user type agent
+#2 Test OK email & OK password -> outcome: user
+#3 Test WRONG email & OK password -> outcome: None
+#4 Test OK email & WRONG password -> outcome: None

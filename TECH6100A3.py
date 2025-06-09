@@ -31,6 +31,9 @@
 # Bookings: Create bookings, Show all bookings, show bookings by user_id, update status linked to flight status
 # Program Rewards & VIP labels: tagging-user labels done by the program based on conditions above
 # Reporting: Export Current Customer db and Export All Customer db, both in csv file.
+# Unit Tests: 2 sets of unit tests are created: 1 for creating a new User object, and 1 for user login. Last one covers
+#   4 scenarios: Clean user list & add testing user type agent, Test OK email & OK password -> outcome: user,
+#   Test WRONG email & OK password -> outcome: None, and Test OK email & WRONG password -> outcome: None
 
 # Out of scope:
 # 1. Global command to cancel an ongoing task in some cases.
