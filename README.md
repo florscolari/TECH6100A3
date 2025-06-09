@@ -1,20 +1,20 @@
 # TECH6100 Assessment 3 Florencia Scolari June 2025
 
-# NOTE: You'll find the unit tests below the script to run the program.
-# Please follow the instructions to activate them.
-# Thank you.
+NOTE: You'll find the unit tests below the script to run the program.
+Please follow the instructions to activate them.
+Thank you.
 
 # Reward Program Conditions applied by the system:
-# A customer is VIP when more than 1200 are earned & more than 4 flights.
-# A customer is also Silver level when they have 0-1 flights, Premium when 2-4, and Black with 5 or more flights
+A customer is VIP when more than 1200 are earned & more than 4 flights.
+A customer is also Silver level when they have 0-1 flights, Premium when 2-4, and Black with 5 or more flights
 
 # In scope:
-# User management: Create new customer account, Delete customer account, ID creation, Read customer details (my profile),
-#   store deleted accounts for travel agent purposes, login for 2 roles (customer & agent), filter & show users
-#   by  age range, by id, by city they live in
-# Flight management: Create & Delete flights, change status, Show available flights & show all flights, flight number creation
-# Bookings: Create bookings, Show all bookings, show bookings by user_id, update status linked to flight status
-# Program Rewards & VIP labels: tagging-user labels done by the program based on conditions above
+- User management: Create new customer account, Delete customer account, ID creation, Read customer details (my profile),
+    store deleted accounts for travel agent purposes, login for 2 roles (customer & agent), filter & show users
+    by  age range, by id, by city they live in
+- Flight management: Create & Delete flights, change status, Show available flights & show all flights, flight number creation
+- Bookings: Create bookings, Show all bookings, show bookings by user_id, update status linked to flight status
+- Program Rewards & VIP labels: tagging-user labels done by the program based on conditions above
 # Reporting: Export Current Customer db and Export All Customer db, both in csv file.
 
 # Out of scope:
