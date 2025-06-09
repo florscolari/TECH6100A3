@@ -1969,7 +1969,7 @@ class TestUserLogin(unittest.TestCase):
 
     #2 Test OK email & OK password -> outcome: user
     def test_login_correct_credentials(self):
-        result = login_with_arguments("flor@sco.com.au", "Abc123")
+        result = login_with_arguments("abc@a.com.au", "Abc123")
         self.assertEqual(result.get_email(), agent1.get_email(), "Expected user")
 
     #3 Test WRONG email & OK password -> outcome: None
